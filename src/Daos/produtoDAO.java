@@ -101,7 +101,8 @@ public class produtoDAO extends BaseDAO {
 				", categoria = " + quoteStr(produto.getCategoria())+ 
 				", preco = " + produto.getPreco().toString() +
 				", quantidade = " + Integer.toString(produto.getQuantidade()) +
-				", barCode = " + produto.getBarCode()				
+				", barCode = " + produto.getBarCode() +
+				", valdate = " + quoteStr(produto.getValDate())
 				)
 		.where("id", "=", Integer.toString((produto.getId())))
 		.commit();
