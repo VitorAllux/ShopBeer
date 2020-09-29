@@ -64,6 +64,25 @@ public class produtoDAO extends BaseDAO {
 		}
 	}
 	
+	
+	public ArrayList<ProdutoModel> getAllProductsDesc(String desc) throws SQLException {
+		ResultSet result = null;
+		result = this.select("*")
+				.from("produto")
+				.where("nome", "LIKE", "'"+desc+"%'")
+				.apply();
+		ArrayList<ProdutoModel> produtoList = new ArrayList<ProdutoModel>();
+		while (result.next()) {
+			if (result.getInt("id") > 0) {
+				produtoList.add(new ProdutoModel().setId(result.getInt("id")).setNome(result.getString("nome"))
+						.setCategoria(result.getString("categoria")).setPreco(result.getDouble("preco"))
+						.setQuantidade(result.getInt("quantidade")).setBarCode(result.getInt("barCode")).setValDate(result.getDate("valDate")));
+			}
+		}
+		return produtoList;
+	}
+	
+	
 	public void createProduto(ProdutoModel produto) throws SQLException {
 		this.insertInto("produto", "nome, categoria, preco, quantidade, barCode, valdate")
 		.values(quoteStr(produto.getNome()) +
