@@ -147,12 +147,12 @@ public class FrameLogin extends javax.swing.JFrame {
         ConnectionFactory conect = new ConnectionFactory();
         Connection conn = null;
         /*if(txtUser.getText().isEmpty() || txtPassword.getText().isEmpty()) {
-        	JOptionPane.showMessageDialog(null, "Informe login e senha!","Inválido!",JOptionPane.ERROR_MESSAGE,new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox24.png")));
+        	JOptionPane.showMessageDialog(null, "Informe login e senha!","Inválido!",JOptionPane.ERROR_MESSAGE,new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
         } else {
         	try {
 				conn = conect.getConnection("BeerDB", txtUser.getText().toString(), txtPassword.getText().toString());
 				if(conn == null) {
-					JOptionPane.showMessageDialog(null, "Usuário ou senha inválido!","Inválido!",JOptionPane.ERROR_MESSAGE,new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox24.png")));
+					JOptionPane.showMessageDialog(null, "Usuário ou senha inválido!","Inválido!",JOptionPane.ERROR_MESSAGE,new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
 				}
 				else {
 				ViewMenu menu = new ViewMenu(conn);

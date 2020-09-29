@@ -107,10 +107,10 @@ public class produtoDAO extends BaseDAO {
 		.commit();
 	}
 	
-	public void deleteProduto(Integer id) throws SQLException {
+	public void deleteProduto(Integer codigo) throws SQLException {
 		this.delete()
 		.from("produto")
-		.where("id", "=", id.toString())
+		.where("barcode", "=", codigo.toString())
 		.commit();
 	}
 

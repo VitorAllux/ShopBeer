@@ -105,23 +105,8 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		btnSalvar.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				try {
-					if (txtBarCode.getText().isEmpty() || txtNome.getText().isEmpty()
-							|| txtQuantidade.getText().isEmpty() || txtValidade.getText().isEmpty()
-							|| txtValor.getText().isEmpty()) {
-						JOptionPane.showMessageDialog(null, "Preencha todos os campos!", "campos!",
-								JOptionPane.ERROR_MESSAGE,
-								new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox24.png")));
-					} else if (ComboboxProdutos.getSelectedIndex() == 0) {
-						JOptionPane.showMessageDialog(null, "Selecione uma categoria", "categoria!",
-								JOptionPane.ERROR_MESSAGE,
-								new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox24.png")));
-
-					} else {
 						btnSalvarActionPerformed(evt);
 						fixTable();
-						System.out.println("foi tentar salvar!");
-					}
-
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -135,12 +120,13 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/procurar.png"))); // NOI18N
 		btnBuscar.setToolTipText("Procurar");
 		btnBuscar.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+
+	 public void actionPerformed(java.awt.event.ActionEvent evt) {
 				btnBuscarActionPerformed(evt);
 			}
 		});
 
-		btnDeletar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/lixeira-de-reciclagem.png"))); // NOI18N
+		btnDeletar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/lixeira-de-reciclagem preta.png"))); // NOI18N
 		btnDeletar.setToolTipText("Deletar");
 		btnDeletar.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -148,11 +134,16 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 			}
 		});
 
-		btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/proibido.png"))); // NOI18N
+		btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/cancelar.png"))); // NOI18N
 		btnCancelar.setToolTipText("Cancelar");
 		btnCancelar.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				btnCancelarActionPerformed(evt);
+				try {
+					btnCancelarActionPerformed(evt);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 
@@ -287,16 +278,28 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 
 		try {
 
-			getFields();
+
 			if (isInserting) {
-				if (produtoDao.getOneProdutoBar(produtoChange.getBarCode()) != null) {
+				if(txtNome.getText().isEmpty() || txtBarCode.getText().isEmpty() || txtQuantidade.getText().isEmpty() || txtValidade.getText().equals("__/__/____") || txtValor.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Preencha todos os campos!", "campos!",
+							JOptionPane.ERROR_MESSAGE,
+							new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
+				}
+				else if(ComboboxProdutos.getSelectedIndex() == 0) {
+					JOptionPane.showMessageDialog(null, "Selecione uma categoria", "categoria!",
+							JOptionPane.ERROR_MESSAGE,
+							new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
+				}
+				else if (produtoDao.getOneProdutoBar(Integer.parseInt(txtBarCode.getText())) != null) {
 					JOptionPane.showMessageDialog(null, "Produto ja cadastrado!", "falha!", JOptionPane.ERROR_MESSAGE,
-							new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox24.png")));
+							new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
 				} else {
+					getFields();
 					produtoDao.createProduto(produtoChange);
 					JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!!", "Sucesso!",
 							JOptionPane.INFORMATION_MESSAGE,
 							new javax.swing.ImageIcon(getClass().getResource("/Imagens/verificado.png")));
+					btnCancelar.doClick();
 				}
 			} else {
 				produtoDao.updateProduto(produtoChange);
@@ -308,37 +311,66 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 
 	private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnBuscarActionPerformed
 		// TODO add your handling code here:
-		//JOptionPane.showInputDialog(null, "Informe o nome do produto:", "busca", JOptionPane.WANTS_INPUT_PROPERTY, new javax.swing.ImageIcon(getClass().getResource("/Imagens/zoom.png")), null, "");
+		// JOptionPane.showInputDialog(null, "Informe o nome do produto:", "busca",
+		// JOptionPane.WANTS_INPUT_PROPERTY, new
+		// javax.swing.ImageIcon(getClass().getResource("/Imagens/zoom.png")), null,
+		// "");
 		String text;
-		text = (String) JOptionPane.showInputDialog(null, "Informe o nome do produto:","busca", JOptionPane.DEFAULT_OPTION, new javax.swing.ImageIcon(getClass().getResource("/Imagens/zoomx64.png")), null, "");
+		text = (String) JOptionPane.showInputDialog(null, "Informe o nome do produto:", "busca",
+				JOptionPane.DEFAULT_OPTION, new javax.swing.ImageIcon(getClass().getResource("/Imagens/zoomx64.png")),
+				null, "");
 		ArrayList<ProdutoModel> readList;
 		try {
 			readList = produtoDao.getAllProductsDesc(text);
-			if(readList.size()>0) {
-			model.setRowCount(0);
-			for (ProdutoModel produtoModel : readList) {
-				
-				InsertRow(produtoModel);
-				System.out.println("foi");
-			}
-			}else {
+			if (readList.size() > 0) {
+				model.setRowCount(0);
+				for (ProdutoModel produtoModel : readList) {
+
+					InsertRow(produtoModel);
+				}
+			} else {
 				JOptionPane.showMessageDialog(null, "Nenhum produto encontrado!", "falha!", JOptionPane.ERROR_MESSAGE,
-						new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox24.png")));
+						new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox64.png")));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-
 	}// GEN-LAST:event_btnBuscarActionPerformed
 
 	private void btnDeletarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDeletarActionPerformed
 		// TODO add your handling code here:
+		if (jTable1.getSelectedRow() < 0) {
+			JOptionPane.showMessageDialog(null, "Nenhum produto Selecionado!", "falha!", JOptionPane.ERROR_MESSAGE,
+					new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
+		} else {
+			int row = jTable1.getSelectedRow();
+			int cod = Integer.parseInt((String) model.getValueAt(row, 0));
+			try {
+				produtoDao.deleteProduto(cod);
+				JOptionPane.showMessageDialog(null, "Produto deletado com sucesso!!", "Sucesso!",
+						JOptionPane.INFORMATION_MESSAGE,
+						new javax.swing.ImageIcon(getClass().getResource("/Imagens/verificado.png")));
+				fixTable();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
 	}// GEN-LAST:event_btnDeletarActionPerformed
 
-	private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCancelarActionPerformed
+	private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {// GEN-FIRST:event_btnCancelarActionPerformed
 		// TODO add your handling code here:
+		txtBarCode.setText(null);
+		txtNome.setText(null);
+		txtQuantidade.setText(null);
+		txtValidade.setText(null);
+		txtValor.setText(null);
+		ComboboxProdutos.setSelectedIndex(0);
+		fixTable();
+
 	}// GEN-LAST:event_btnCancelarActionPerformed
 
 	private void txtBarCodeActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtBarCodeActionPerformed
@@ -391,8 +423,6 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		produtoChange.setValDate(fmt.parse(txtValidade.getText()));
 
 	}
-
-
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	private javax.swing.JComboBox<String> ComboboxProdutos;
