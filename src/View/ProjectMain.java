@@ -7,6 +7,7 @@ import java.util.Date;
 
 import Connection.ConnectionFactory;
 import Daos.produtoDAO;
+import Daos.vendaProdutoDAO;
 import Models.ProdutoModel;
 
 /**
@@ -33,6 +34,8 @@ public class ProjectMain {
     System.out.println(dao.getOneProduto(6).getNome());
     //dao.deleteProduto(4);
      */
+
+    
     }
             
 }

@@ -92,7 +92,7 @@ public class ViewMenu extends javax.swing.JFrame {
         mMenu.add(mMenuProdutos);
 
         mMenuUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/assaltante.png"))); // NOI18N
-        mMenuUsuario.setText("Usu√°rio");
+        mMenuUsuario.setText("Usu·rio");
         mMenuUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mMenuUsuarioActionPerformed(evt);
@@ -120,7 +120,7 @@ public class ViewMenu extends javax.swing.JFrame {
         mVendas.add(mVendasVendas);
 
         mVendasRelatorioVendas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/relatorio-de-venda.png"))); // NOI18N
-        mVendasRelatorioVendas.setText("Relat√≥rio de Vendas");
+        mVendasRelatorioVendas.setText("RelatÛrio de Vendas");
         mVendas.add(mVendasRelatorioVendas);
 
         jMenuBar1.add(mVendas);
@@ -156,6 +156,10 @@ public class ViewMenu extends javax.swing.JFrame {
 
     private void mVendasVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mVendasVendasActionPerformed
         // TODO add your handling code here:
+        FrameVendas fvendas = new FrameVendas(conn);
+        jDesktopPane2.add(fvendas);
+        fvendas.setPosicao();
+        fvendas.show();
     }//GEN-LAST:event_mVendasVendasActionPerformed
 
     /**

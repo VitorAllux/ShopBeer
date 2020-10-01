@@ -6,11 +6,17 @@
 package View;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import Connection.ConnectionFactory;
+import Daos.produtoDAO;
+import Daos.vendaProdutoDAO;
+import Models.ProdutoModel;
+import Models.vendaProdutoModel;
 
 /**
  *
@@ -214,6 +220,31 @@ public class FrameLogin extends javax.swing.JFrame {
                 new FrameLogin().setVisible(true);
             }
         });
+        ConnectionFactory conect = new ConnectionFactory();
+        Connection conn = conect.getConnection("BeerDB","postgres","318463-Vitor");
+		 vendaProdutoDAO vendaproduto = new vendaProdutoDAO(conn);
+	        produtoDAO produtoDao = new produtoDAO(conn);
+	        System.out.println("arroz");
+	        try {
+				System.out.println(produtoDao.getAllProducts().size());
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        try {
+				vendaproduto.createVendaProduto(produtoDao.getAllProducts(), 1);
+				ArrayList<vendaProdutoModel> produto = vendaproduto.getAllVendaProduto(1);
+				ArrayList<ProdutoModel> produtomodel = vendaproduto.getAllProdutos(1);
+				System.out.println(produto.size());
+				for (ProdutoModel p : produtomodel) {
+					System.out.println(p.getNome());
+				}
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+       
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

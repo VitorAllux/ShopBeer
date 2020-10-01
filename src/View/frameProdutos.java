@@ -296,6 +296,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		try {
 			isInserting = verificaUpdate();
 			if (isInserting) {
+				boolean flag = true;
 				if (txtNome.getText().isEmpty() || txtBarCode.getText().isEmpty() || txtQuantidade.getText().isEmpty()
 						|| txtValidade.getText().equals("__/__/____") || txtValor.getText().isEmpty()) {
 					JOptionPane.showMessageDialog(null, "Preencha todos os campos!", "campos!",
@@ -305,16 +306,20 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 					JOptionPane.showMessageDialog(null, "Selecione uma categoria", "categoria!",
 							JOptionPane.ERROR_MESSAGE,
 							new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
-				} else if (produtoDao.getOneProdutoBar(Integer.parseInt(txtBarCode.getText())) != null) {
-					JOptionPane.showMessageDialog(null, "Produto ja cadastrado!", "falha!", JOptionPane.ERROR_MESSAGE,
-							new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
 				} else {
-					getFields();
-					produtoDao.createProduto(produtoChange);
-					JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!!", "Sucesso!",
-							JOptionPane.INFORMATION_MESSAGE,
-							new javax.swing.ImageIcon(getClass().getResource("/Imagens/verificado.png")));
-					btnCancelar.doClick();
+					try {
+						System.out.println(produtoDao.getOneProdutoBar(txtBarCode.getText().toString()).getNome());
+					} catch (Exception e) {
+						// TODO: handle exception
+						flag = false;
+
+					}
+					if(flag == false) {
+
+					}else {
+						JOptionPane.showMessageDialog(null, "Produto ja cadastrado!", "falha!", JOptionPane.ERROR_MESSAGE,
+								new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
+					}
 				}
 			} else {
 				fazUpdate();
@@ -365,7 +370,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 					new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
 		} else {
 			int row = jTable1.getSelectedRow();
-			int cod = Integer.parseInt((String) model.getValueAt(row, 0));
+			String cod = model.getValueAt(row, 0).toString();
 			try {
 				produtoDao.deleteProduto(cod);
 				JOptionPane.showMessageDialog(null, "Produto deletado com sucesso!!", "Sucesso!",
@@ -425,7 +430,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 	}
 
 	private void InsertRow(ProdutoModel produto) {
-		model.addRow(new String[] { Integer.toString(produto.getBarCode()), produto.getNome(),
+		model.addRow(new String[] { produto.getBarCode(), produto.getNome(),
 				Double.toString(produto.getPreco()), Integer.toString(produto.getQuantidade()), produto.getValDate() });
 
 	}
@@ -435,7 +440,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 			produtoChange = new ProdutoModel();
 		}
 		produtoChange.setNome(txtNome.getText());
-		produtoChange.setBarCode(Integer.parseInt(txtBarCode.getText()));
+		produtoChange.setBarCode(txtBarCode.getText());
 		produtoChange.setCategoria(ComboboxProdutos.getSelectedItem().toString());
 		produtoChange.setPreco(Double.valueOf(txtValor.getText()));
 		produtoChange.setQuantidade(Integer.parseInt(txtQuantidade.getText()));
@@ -447,7 +452,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		ProdutoModel produto = new ProdutoModel();
 		for (int i = 0; i < model.getRowCount(); i++) {
 			if (!listChange.get(i).getNome().equals(model.getValueAt(i, 1).toString())
-					|| !(listChange.get(i).getBarCode() == Integer.parseInt(model.getValueAt(i, 0).toString()))
+					|| !(listChange.get(i).getBarCode().equals(model.getValueAt(i, 0).toString()))
 					|| !(listChange.get(i).getPreco() == Double.parseDouble(model.getValueAt(i, 2).toString()))
 					|| !(listChange.get(i).getQuantidade() ==Integer.parseInt(model.getValueAt(i, 3).toString()))
 					|| !(listChange.get(i).getValDate().equals(model.getValueAt(i, 4).toString()))) {
@@ -461,14 +466,14 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		ProdutoModel produto = new ProdutoModel();
 		for (int i = 0; i < model.getRowCount(); i++) {
 			if (!listChange.get(i).getNome().equals(model.getValueAt(i, 1).toString())
-					|| !(listChange.get(i).getBarCode() == Integer.parseInt(model.getValueAt(i, 0).toString()))
+					|| !(listChange.get(i).getBarCode().equals(model.getValueAt(i, 0).toString()))
 					|| !(listChange.get(i).getPreco() == Double.parseDouble(model.getValueAt(i, 2).toString()))
 					|| !(listChange.get(i).getQuantidade() == Integer.parseInt(model.getValueAt(i, 3).toString()))
 					|| !(listChange.get(i).getValDate().equals(fmt.parse(model.getValueAt(i, 4).toString())))) {
 					produto.setId(listChange.get(i).getId());
 					produto.setNome(model.getValueAt(i, 1).toString());
 					produto.setCategoria(listChange.get(i).getCategoria());
-					produto.setBarCode(Integer.parseInt(model.getValueAt(i, 0).toString()));
+					produto.setBarCode(model.getValueAt(i, 0).toString());
 					produto.setPreco(Double.parseDouble(model.getValueAt(i, 2).toString()));
 					produto.setQuantidade(Integer.parseInt(model.getValueAt(i, 3).toString()));
 					produto.setValDate(fmt.parse((String) model.getValueAt(i, 4)));

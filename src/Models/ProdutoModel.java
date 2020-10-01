@@ -18,7 +18,7 @@ public class ProdutoModel {
     private String categoria;
     private Double preco;
 	private int quantidade;
-    private int barCode;
+    private String barCode;
     private Date valDate;
     
     public ProdutoModel() {
@@ -27,7 +27,7 @@ public class ProdutoModel {
     	categoria = "";
     	preco = (double) 0;
     	quantidade = 0;
-    	barCode = 0;
+    	barCode = "";
     	valDate = new Date(0);
     }
     
@@ -91,11 +91,11 @@ public class ProdutoModel {
 
     }
 
-    public int getBarCode() {
+    public String getBarCode() {
         return barCode;
     }
 
-    public ProdutoModel setBarCode(int barCode) {
+    public ProdutoModel setBarCode(String barCode) {
         this.barCode = barCode;
 		return this;
 
