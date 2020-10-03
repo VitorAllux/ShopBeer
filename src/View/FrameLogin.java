@@ -220,7 +220,7 @@ public class FrameLogin extends javax.swing.JFrame {
                 new FrameLogin().setVisible(true);
             }
         });
-        ConnectionFactory conect = new ConnectionFactory();
+       /* ConnectionFactory conect = new ConnectionFactory();
         Connection conn = conect.getConnection("BeerDB","postgres","318463-Vitor");
 		 vendaProdutoDAO vendaproduto = new vendaProdutoDAO(conn);
 	        produtoDAO produtoDao = new produtoDAO(conn);
@@ -242,7 +242,7 @@ public class FrameLogin extends javax.swing.JFrame {
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
+			}*/
        
 
     }

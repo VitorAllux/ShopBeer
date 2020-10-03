@@ -69,7 +69,7 @@ public class produtoDAO extends BaseDAO {
 		ResultSet result = null;
 		result = this.select("*")
 				.from("produto")
-				.where("nome", "LIKE", "'"+desc+"%'")
+				.where("Lower(nome)", "LIKE", "lower('"+desc+"%')")
 				.apply();
 		ArrayList<ProdutoModel> produtoList = new ArrayList<ProdutoModel>();
 		while (result.next()) {
@@ -111,7 +111,7 @@ public class produtoDAO extends BaseDAO {
 	public void deleteProduto(String barCode) throws SQLException {
 		this.delete()
 		.from("produto")
-		.where("barcode", "=", "'"+barCode+"%'")
+		.where("barcode", "LIKE", "'"+barCode+"%'")
 		.commit();
 	}
 

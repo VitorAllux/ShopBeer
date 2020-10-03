@@ -43,6 +43,7 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 	private ArrayList<ProdutoModel> listChange;
 	private boolean isInserting = true;
 	private SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+	private Double valorTotal;
 
 	public FrameVendas(Connection conn) {
 		this.conn = conn;
@@ -74,13 +75,12 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 		JScrollPane = new javax.swing.JScrollPane();
 		JTable = new javax.swing.JTable();
 		txtBarcode = new javax.swing.JTextField();
-		btnBuscar = new javax.swing.JButton();
 		btnDeletar = new javax.swing.JButton();
 		btnSalvar1 = new javax.swing.JButton();
 		txtValor = new javax.swing.JTextField();
 		jLabel3 = new javax.swing.JLabel();
 		btnCancelar = new javax.swing.JButton();
-		btnCancelar1 = new javax.swing.JButton();
+		btnVender = new javax.swing.JButton();
 		jLabel4 = new javax.swing.JLabel();
 		ComboPagamento = new javax.swing.JComboBox<>();
 
@@ -102,10 +102,27 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 
 		jLabel2.setText("Produto:");
 
-		JTable.setModel(new javax.swing.table.DefaultTableModel(
-				new Object[][] { { null, null, null, null, null }, { null, null, null, null, null },
-						{ null, null, null, null, null }, { null, null, null, null, null } },
-				new String[] { "Codigo", "Nome", "Valor", "Duantidade" }));
+		JTable.setModel(new DefaultTableModel(
+				new String[] { "Codigo", "Nome", "Valor", "Duantidade" }, 0){
+			
+			boolean[] canEdit = new boolean[]{
+                    false, false, false, true
+            };
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+                return canEdit[column];
+			}
+		});
+		
+		JTable.addPropertyChangeListener(e -> {
+		    
+		    if("tableCellEditor".equals(e.getPropertyName())) {
+		        if(!JTable.isEditing())
+		            atualizaValor();
+		    }
+		});
 		JScrollPane.setViewportView(JTable);
 
 		txtBarcode.addActionListener(new java.awt.event.ActionListener() {
@@ -120,13 +137,6 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 		});
 		txtBarcode.setRequestFocusEnabled(true);
 
-		btnBuscar.setText("Buscar");
-		btnBuscar.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				btnBuscarActionPerformed(evt);
-			}
-		});
-
 		btnDeletar
 				.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/lixeira-de-reciclagem preta.png"))); // NOI18N
 		btnDeletar.setToolTipText("Deletar");
@@ -136,7 +146,7 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 			}
 		});
 
-		btnSalvar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/disquetex32.png"))); // NOI18N
+		btnSalvar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/adicionar.png"))); // NOI18N
 		btnSalvar1.setToolTipText("Adicionar");
 		btnSalvar1.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -168,11 +178,11 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 			}
 		});
 
-		btnCancelar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/saláriox32.png"))); // NOI18N
-		btnCancelar1.setToolTipText("Finalizar Venda");
-		btnCancelar1.addActionListener(new java.awt.event.ActionListener() {
+		btnVender.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/saláriox32.png"))); // NOI18N
+		btnVender.setToolTipText("Finalizar Venda");
+		btnVender.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				btnCancelar1ActionPerformed(evt);
+				btnVenderActionPerformed(evt);
 			}
 		});
 
@@ -194,8 +204,7 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 										.addGroup(layout.createSequentialGroup()
 												.addComponent(txtBarcode, javax.swing.GroupLayout.PREFERRED_SIZE, 141,
 														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addGap(18, 18, 18).addComponent(btnBuscar).addGap(18, 18, 18)
-												.addComponent(jLabel4)
+												.addGap(18, 18, 18).addGap(18, 18, 18).addComponent(jLabel4)
 												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 												.addComponent(ComboPagamento, javax.swing.GroupLayout.PREFERRED_SIZE,
 														javax.swing.GroupLayout.DEFAULT_SIZE,
@@ -219,45 +228,56 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 								.addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 93,
 										javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addGap(18, 18, 18)
-								.addComponent(btnCancelar1, javax.swing.GroupLayout.PREFERRED_SIZE, 84,
+								.addComponent(btnVender, javax.swing.GroupLayout.PREFERRED_SIZE, 84,
 										javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addContainerGap())
 						.addGroup(layout.createSequentialGroup().addComponent(JScrollPane).addGap(10, 10, 10)))));
-		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout
-				.createSequentialGroup().addContainerGap()
-				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jLabel1)
-						.addComponent(txtData, javax.swing.GroupLayout.PREFERRED_SIZE, 25,
-								javax.swing.GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jLabel2)
-						.addComponent(btnBuscar).addComponent(txtBarcode).addComponent(jLabel4)
-						.addComponent(ComboPagamento, javax.swing.GroupLayout.PREFERRED_SIZE,
-								javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-				.addGap(18, 18, 18)
-				.addComponent(JScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 258,
-						javax.swing.GroupLayout.PREFERRED_SIZE)
-				.addGap(18, 18, 18)
-				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addComponent(btnSalvar1, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
-						.addComponent(btnDeletar, javax.swing.GroupLayout.DEFAULT_SIZE,
-								javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE,
-								javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(btnCancelar1, javax.swing.GroupLayout.Alignment.TRAILING,
-								javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-								Short.MAX_VALUE)
-						.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-								layout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE).addComponent(jLabel3,
-										javax.swing.GroupLayout.PREFERRED_SIZE, 41,
+		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addContainerGap()
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+								.addComponent(jLabel1).addComponent(txtData, javax.swing.GroupLayout.PREFERRED_SIZE, 25,
 										javax.swing.GroupLayout.PREFERRED_SIZE))
-						.addComponent(txtValor, javax.swing.GroupLayout.Alignment.TRAILING))
-				.addContainerGap().addGap(15, 15, 15)));
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+								.addComponent(jLabel2).addComponent(txtBarcode).addComponent(jLabel4)
+								.addComponent(ComboPagamento, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+						.addGap(18, 18, 18)
+						.addComponent(JScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 258,
+								javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addGap(18, 18, 18)
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+								.addComponent(btnSalvar1, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+								.addComponent(btnDeletar, javax.swing.GroupLayout.DEFAULT_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnVender, javax.swing.GroupLayout.Alignment.TRAILING,
+										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)
+								.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+										layout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE).addComponent(
+												jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 41,
+												javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addComponent(txtValor, javax.swing.GroupLayout.Alignment.TRAILING))
+						.addContainerGap().addGap(15, 15, 15)));
 		pack();
 	}// </editor-fold>//GEN-END:initComponents
 
 	private void fixTable() throws SQLException {
 		this.model = (DefaultTableModel) JTable.getModel();
 		model.setRowCount(0);
+		model.isCellEditable(0, 3);
+	}
+	
+	private void atualizaValor() {
+		double valor = 0;
+		for (int i = 0; i < model.getRowCount(); i++) {
+			valor += (Double.parseDouble(model.getValueAt(i, 2).toString())
+					* Double.parseDouble(model.getValueAt(i, 3).toString()));
+		}
+		txtValor.setText(String.valueOf(valor));
+		valorTotal = valor;
 	}
 
 	private void InsertRow(ProdutoModel produto2) {
@@ -271,23 +291,34 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 
 	private void txtBarcodeActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {// GEN-FIRST:event_txtBarcodeActionPerformed
 		try {
-			InsertRow(produtoDao.getOneProdutoBar(txtBarcode.getText().toString()));
+			ProdutoModel produto = produtoDao.getOneProdutoBar(txtBarcode.getText().toString());
+			boolean flag = false;
+			for (int i = 0; i < model.getRowCount(); i++) {
+				if (produto.getBarCode().equals(model.getValueAt(i, 0))) {
+					model.setValueAt(Integer.parseInt(model.getValueAt(i, 3).toString()) + 1, i, 3);
+					flag = true;
+				}
+			}
+			if (flag == false)
+				InsertRow(produtoDao.getOneProdutoBar(txtBarcode.getText().toString()));
 		} catch (Exception e) {
 			// TODO: handle exception
 			JOptionPane.showMessageDialog(null, "Produto não cadastrado!", "falha!", JOptionPane.ERROR_MESSAGE,
 					new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
 		}
-		double valor = 0;
-		for(int i =0;i< model.getRowCount(); i++) {
-			valor += Double.parseDouble(model.getValueAt(i,2).toString());
-		}
-		txtValor.setText(new Double(valor).toString());
 		txtBarcode.setText(null);
-
+		atualizaValor();
 	}// GEN-LAST:event_txtBarcodeActionPerformed
 
 	private void btnDeletarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDeletarActionPerformed
 		// TODO add your handling code here:
+		if (JTable.getSelectedRow() < 0) {
+			JOptionPane.showMessageDialog(null, "Nenhum produto Selecionado!", "falha!", JOptionPane.ERROR_MESSAGE,
+					new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
+		} else {
+			model.removeRow(JTable.getSelectedRow());
+			atualizaValor();
+		}
 	}// GEN-LAST:event_btnDeletarActionPerformed
 
 	private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jTextField1ActionPerformed
@@ -300,15 +331,46 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 
 	private void btnSalvar1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnSalvar1ActionPerformed
 		// TODO add your handling code here:
+		String text = (String) JOptionPane.showInputDialog(null, "Informe o codigo de barras do produto:", "busca",
+				JOptionPane.DEFAULT_OPTION,
+				new javax.swing.ImageIcon(getClass().getResource("/Imagens/codigo-de-barrasx64.png")), null, "");
+		try {
+			ProdutoModel produto = produtoDao.getOneProdutoBar(text);
+			boolean flag = false;
+			for (int i = 0; i < model.getRowCount(); i++) {
+				if (produto.getBarCode().equals(model.getValueAt(i, 0))) {
+					model.setValueAt(Integer.parseInt(model.getValueAt(i, 3).toString()) + 1, i, 3);
+					flag = true;
+				}
+			}
+			if (flag == false)
+				InsertRow(produtoDao.getOneProdutoBar(txtBarcode.getText().toString()));
+		} catch (Exception e) {
+			// TODO: handle exception
+			JOptionPane.showMessageDialog(null, "Produto não cadastrado!", "falha!", JOptionPane.ERROR_MESSAGE,
+					new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
+		}
+		double valor = 0;
+		for (int i = 0; i < model.getRowCount(); i++) {
+			valor += (Double.parseDouble(model.getValueAt(i, 2).toString())
+					* Double.parseDouble(model.getValueAt(i, 3).toString()));
+		}
+		txtValor.setText(String.valueOf(valor));
+		txtBarcode.setText(null);
+
 	}// GEN-LAST:event_btnSalvar1ActionPerformed
 
-	private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCancelar1ActionPerformed
+	private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnVenderActionPerformed
 		// TODO add your handling code here:
-	}// GEN-LAST:event_btnCancelar1ActionPerformed
-
-	private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnBuscarActionPerformed
-		// TODO add your handling code here:
-	}// GEN-LAST:event_btnBuscarActionPerformed
+		if(model.getRowCount()<=0) {
+			JOptionPane.showMessageDialog(null, "Cadastre produtos produtos!", "falha!", JOptionPane.ERROR_MESSAGE,
+					new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
+		}
+		else if (ComboPagamento.getSelectedIndex()==0) {
+			JOptionPane.showMessageDialog(null, "Selecione um metodo de pagamento!", "falha!", JOptionPane.ERROR_MESSAGE,
+					new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
+		}
+	}// GEN-LAST:event_btnVenderActionPerformed
 
 	public void setPosicao() {
 		Dimension d = this.getDesktopPane().getSize();
@@ -319,9 +381,8 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 	private javax.swing.JComboBox<String> ComboPagamento;
 	private javax.swing.JScrollPane JScrollPane;
 	private javax.swing.JTable JTable;
-	private javax.swing.JButton btnBuscar;
 	private javax.swing.JButton btnCancelar;
-	private javax.swing.JButton btnCancelar1;
+	private javax.swing.JButton btnVender;
 	private javax.swing.JButton btnDeletar;
 	private javax.swing.JButton btnSalvar1;
 	private javax.swing.JLabel jLabel1;

@@ -20,6 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
 import Daos.produtoDAO;
+import Daos.vendaProdutoDAO;
 import Models.ProdutoModel;
 
 /**
@@ -43,7 +44,6 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		this.conn = conn;
 		produtoDao = new produtoDAO(conn);
 		initComponents();
-		btnGravar.setEnabled(false);
 		try {
 			fixTable();
 		} catch (SQLException e) {
@@ -71,7 +71,6 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		btnCancelar = new javax.swing.JButton();
 		jLabel2 = new javax.swing.JLabel();
 		txtBarCode = new javax.swing.JTextField();
-		btnGravar = new javax.swing.JButton();
 		jLabel3 = new javax.swing.JLabel();
 		txtValor = new javax.swing.JTextField();
 		jLabel4 = new javax.swing.JLabel();
@@ -159,12 +158,6 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 			}
 		});
 
-		btnGravar.setText("Gravar");
-		btnGravar.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				btnGravarActionPerformed(evt);
-			}
-		});
 
 		jLabel3.setText("Valor");
 
@@ -217,8 +210,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 														.addGroup(layout.createSequentialGroup().addComponent(
 																txtBarCode, javax.swing.GroupLayout.PREFERRED_SIZE, 153,
 																javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(
-																		javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-																.addComponent(btnGravar))
+																		javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
 														.addGroup(layout.createSequentialGroup().addComponent(
 																txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 72,
 																javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -229,7 +221,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 																		javax.swing.GroupLayout.PREFERRED_SIZE, 72,
 																		javax.swing.GroupLayout.PREFERRED_SIZE))
 														.addComponent(txtValidade,
-																javax.swing.GroupLayout.PREFERRED_SIZE, 109,
+																javax.swing.GroupLayout.PREFERRED_SIZE, 80,
 																javax.swing.GroupLayout.PREFERRED_SIZE)))
 										.addGroup(layout.createSequentialGroup()
 												.addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 55,
@@ -265,8 +257,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 				.addGap(18, 18, 18)
 				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jLabel2)
 						.addComponent(txtBarCode, javax.swing.GroupLayout.PREFERRED_SIZE,
-								javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnGravar))
+								javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 				.addGap(18, 18, 18)
 				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
 						.addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -315,7 +306,12 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 
 					}
 					if(flag == false) {
-
+						getFields();
+						produtoDao.createProduto(produtoChange);
+						btnCancelar.doClick();
+						JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!!", "Sucesso!",
+								JOptionPane.INFORMATION_MESSAGE,
+								new javax.swing.ImageIcon(getClass().getResource("/Imagens/verificado.png")));
 					}else {
 						JOptionPane.showMessageDialog(null, "Produto ja cadastrado!", "falha!", JOptionPane.ERROR_MESSAGE,
 								new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
@@ -335,10 +331,6 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 
 	private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnBuscarActionPerformed
 		// TODO add your handling code here:
-		// JOptionPane.showInputDialog(null, "Informe o nome do produto:", "busca",
-		// JOptionPane.WANTS_INPUT_PROPERTY, new
-		// javax.swing.ImageIcon(getClass().getResource("/Imagens/zoom.png")), null,
-		// "");
 		String text;
 		text = (String) JOptionPane.showInputDialog(null, "Informe o nome do produto:", "busca",
 				JOptionPane.DEFAULT_OPTION, new javax.swing.ImageIcon(getClass().getResource("/Imagens/zoomx64.png")),
@@ -373,10 +365,11 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 			String cod = model.getValueAt(row, 0).toString();
 			try {
 				produtoDao.deleteProduto(cod);
+				fixTable();
 				JOptionPane.showMessageDialog(null, "Produto deletado com sucesso!!", "Sucesso!",
 						JOptionPane.INFORMATION_MESSAGE,
 						new javax.swing.ImageIcon(getClass().getResource("/Imagens/verificado.png")));
-				fixTable();
+
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -400,10 +393,6 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 	private void txtBarCodeActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtBarCodeActionPerformed
 		// TODO add your handling code here:
 	}// GEN-LAST:event_txtBarCodeActionPerformed
-
-	private void btnGravarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnGravarActionPerformed
-		// TODO add your handling code here:
-	}// GEN-LAST:event_btnGravarActionPerformed
 
 	private void txtValorActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtValorActionPerformed
 		// TODO add your handling code here:
@@ -488,7 +477,6 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 	private javax.swing.JButton btnBuscar;
 	private javax.swing.JButton btnCancelar;
 	private javax.swing.JButton btnDeletar;
-	private javax.swing.JButton btnGravar;
 	private javax.swing.JButton btnSalvar;
 	private javax.swing.JLabel jLabel1;
 	private javax.swing.JLabel jLabel2;
