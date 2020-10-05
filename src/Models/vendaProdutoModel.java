@@ -1,7 +1,7 @@
 package Models;
 
 public class vendaProdutoModel {
-	private Integer id, idProduto, idVenda;
+	private Integer id, idProduto, idVenda, quantidade;
 	
 
 	public vendaProdutoModel() {
@@ -43,6 +43,13 @@ public class vendaProdutoModel {
 		return this;
 	}
 	
+	public Integer getQuantidade() {
+		return quantidade;
+	}
 	
+	public vendaProdutoModel setQuantidade(Integer quantidade) {
+		this.quantidade = quantidade;
+		return this;
+	}
 	
 }

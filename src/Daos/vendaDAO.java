@@ -71,13 +71,29 @@ public class vendaDAO extends BaseDAO {
 		}
 		return produtoList;
 	}
-*/
+	
+		
 	public void createVenda(VendaModel venda) throws SQLException {
 		this.insertInto("vendas", "data, valor, pagamento")
 				.values(quoteStr(venda.getdata()) + ", " + venda.getValor().toString() + ", " + quoteStr(venda.getPagamento()))
 				.commit();
 	}
+*/
 
+	
+	public int createVenda(VendaModel venda) throws SQLException{
+		ResultSet result = this.insertInto("vendas", "data, valor, pagamento")
+		.values(quoteStr(venda.getdata()) + ", " + venda.getValor().toString() + ", " + quoteStr(venda.getPagamento()))
+		.returning("id")
+		.apply();
+		if(result.next()) {
+			return result.getInt(1);
+		}
+		else {
+			return 0;
+		}
+	}
+	
 	public void updateVenda(VendaModel venda) throws SQLException {
 		this.update("vendas")
 				.setValue(" data = " + quoteStr(venda.getdata()) + ", valor = " + venda.getValor().toString() + ", pagamento = " + quoteStr(venda.getPagamento()))

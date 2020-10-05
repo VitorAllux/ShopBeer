@@ -63,7 +63,8 @@ public class vendaProdutoDAO extends BaseDAO{
 		if(result.next()) {
 			vendaProdutoModel vendaProduto = new vendaProdutoModel();
 			return vendaProduto.setIdVenda(result.getInt("id_vendas"))
-					.setIdProduto(result.getInt("id_produto"));
+					.setIdProduto(result.getInt("id_produto"))
+					.setQuantidade(result.getInt("quantidade"));
 		}else {
 			return null;
 		}
@@ -73,8 +74,8 @@ public class vendaProdutoDAO extends BaseDAO{
 		deleteVendaProduto(venda, 0);
 
 		for(ProdutoModel produtoVenda : vendaProduto) {
-			this.insertInto("venda_produto", "id_vendas, id_produto")
-			.values(venda.toString() +", "+Integer.toString(produtoVenda.getId()))
+			this.insertInto("venda_produto", "id_vendas, id_produto, quantidade")
+			.values(venda.toString() +", "+Integer.toString(produtoVenda.getId()) +", "+Integer.toString(produtoVenda.getQuantidade()))
 			.setSql(getSql() + ";");			
 		}
 		commit();

@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,6 +21,8 @@ import Daos.produtoDAO;
 import Daos.vendaDAO;
 import Daos.vendaProdutoDAO;
 import Models.ProdutoModel;
+import Models.VendaModel;
+import Models.vendaProdutoModel;
 
 /**
  *
@@ -39,7 +42,8 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 	private vendaDAO vendaDao;
 	private vendaProdutoDAO vendaProdutoDao;
 	private DefaultTableModel model;
-	private ProdutoModel produto, produtoChange;
+	private ProdutoModel produtoChange;
+	private VendaModel vendaChange;
 	private ArrayList<ProdutoModel> listChange;
 	private boolean isInserting = true;
 	private SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
@@ -53,6 +57,9 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 		initComponents();
 		try {
 			fixTable();
+			vendaChange = new VendaModel();
+			produtoChange = new ProdutoModel();
+			listChange = new ArrayList<ProdutoModel>();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -102,26 +109,30 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 
 		jLabel2.setText("Produto:");
 
-		JTable.setModel(new DefaultTableModel(
-				new String[] { "Codigo", "Nome", "Valor", "Duantidade" }, 0){
-			
-			boolean[] canEdit = new boolean[]{
-                    false, false, false, true
-            };
+		JTable.setModel(new DefaultTableModel(new String[] { "Codigo", "Nome", "Valor", "Duantidade" }, 0) {
+
+			boolean[] canEdit = new boolean[] { false, false, false, true };
 
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// TODO Auto-generated method stub
-                return canEdit[column];
+				return canEdit[column];
 			}
 		});
-		
+
 		JTable.addPropertyChangeListener(e -> {
-		    
-		    if("tableCellEditor".equals(e.getPropertyName())) {
-		        if(!JTable.isEditing())
-		            atualizaValor();
-		    }
+
+			if ("tableCellEditor".equals(e.getPropertyName())) {
+				if (!JTable.isEditing())
+					if (model.getValueAt(JTable.getEditingRow(), 3).toString().length() > 4
+							|| Integer.parseInt(model.getValueAt(JTable.getEditingRow(), 3).toString()) == 0) {
+						JOptionPane.showMessageDialog(null, "Valor invalido!", "falha!", JOptionPane.ERROR_MESSAGE,
+								new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
+						model.setValueAt(1, JTable.getEditingRow(), 3);
+					} else {
+						atualizaValor();
+					}
+			}
 		});
 		JScrollPane.setViewportView(JTable);
 
@@ -182,7 +193,15 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 		btnVender.setToolTipText("Finalizar Venda");
 		btnVender.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				btnVenderActionPerformed(evt);
+				try {
+					btnVenderActionPerformed(evt);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 
@@ -216,7 +235,7 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 								.addComponent(btnSalvar1, javax.swing.GroupLayout.PREFERRED_SIZE, 55,
 										javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-								.addComponent(btnDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, 55,
+								.addComponent(btnDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, 50,
 										javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 								.addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 55,
@@ -269,7 +288,7 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 		model.setRowCount(0);
 		model.isCellEditable(0, 3);
 	}
-	
+
 	private void atualizaValor() {
 		double valor = 0;
 		for (int i = 0; i < model.getRowCount(); i++) {
@@ -360,15 +379,55 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 
 	}// GEN-LAST:event_btnSalvar1ActionPerformed
 
-	private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnVenderActionPerformed
+	private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) throws ParseException, SQLException {// GEN-FIRST:event_btnVenderActionPerformed
 		// TODO add your handling code here:
-		if(model.getRowCount()<=0) {
+		if (model.getRowCount() <= 0) {
 			JOptionPane.showMessageDialog(null, "Cadastre produtos produtos!", "falha!", JOptionPane.ERROR_MESSAGE,
 					new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
-		}
-		else if (ComboPagamento.getSelectedIndex()==0) {
-			JOptionPane.showMessageDialog(null, "Selecione um metodo de pagamento!", "falha!", JOptionPane.ERROR_MESSAGE,
+		} else if (ComboPagamento.getSelectedIndex() == 0) {
+			JOptionPane.showMessageDialog(null, "Selecione um metodo de pagamento!", "falha!",
+					JOptionPane.ERROR_MESSAGE,
 					new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
+		} else {
+			boolean flag = false;
+			for (int i = 0; i < model.getRowCount(); i++) {
+
+				produtoChange = produtoDao.getOneProdutoBar(model.getValueAt(i, 0).toString());
+				if (produtoChange.getQuantidade() == 0) {
+					JOptionPane.showMessageDialog(null, "Produto ( " + produtoChange.getNome() + " ) Fora de estoque!",
+							"falha!", JOptionPane.ERROR_MESSAGE,
+							new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
+					flag = true;
+					break;
+				} else if (produtoChange.getQuantidade() < Integer.parseInt(model.getValueAt(i, 3).toString())) {
+					JOptionPane.showMessageDialog(null,
+							"Quantidade do produto ( " + produtoChange.getNome() + " ) a ser vendido(a) maior que estoque!",
+							"falha!", JOptionPane.ERROR_MESSAGE,
+							new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
+					flag = true;
+					break;
+				}
+
+			}
+			if (flag == false) {
+				//create venda
+				vendaChange.setdata(fmt.parse(txtData.getText()));
+				vendaChange.setPagamento(ComboPagamento.getSelectedItem().toString());
+				vendaChange.setValor(valorTotal);
+				int idVenda = vendaDao.createVenda(vendaChange);
+				
+				//crate vendaproduto
+				for (int i = 0; i < model.getRowCount(); i++) {
+					produtoChange = produtoDao.getOneProdutoBar(model.getValueAt(i, 0).toString());
+					produtoChange.setQuantidade(Integer.parseInt(model.getValueAt(i, 3).toString()));
+						listChange.add(produtoChange);
+				}
+				vendaProdutoDao.createVendaProduto(listChange, idVenda);
+				JOptionPane.showMessageDialog(null, "Venda realizada com sucesso!!", "Sucesso!",
+						JOptionPane.INFORMATION_MESSAGE,
+						new javax.swing.ImageIcon(getClass().getResource("/Imagens/verificado.png")));
+			}
+
 		}
 	}// GEN-LAST:event_btnVenderActionPerformed
 
