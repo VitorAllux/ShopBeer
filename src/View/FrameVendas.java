@@ -426,6 +426,15 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 				JOptionPane.showMessageDialog(null, "Venda realizada com sucesso!!", "Sucesso!",
 						JOptionPane.INFORMATION_MESSAGE,
 						new javax.swing.ImageIcon(getClass().getResource("/Imagens/verificado.png")));
+				for (ProdutoModel produto : listChange) {
+					int quant = produto.getQuantidade();
+					produto = produtoDao.getOneProduto(produto.getId());
+					produto.setQuantidade((produto.getQuantidade()-quant));
+					System.out.println(produto.getQuantidade());
+					produtoDao.updateProduto(produto);
+				}
+				txtValor.setText(null);
+				model.setRowCount(0);
 			}
 
 		}
