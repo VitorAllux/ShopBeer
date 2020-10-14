@@ -21,6 +21,8 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
+import com.toedter.calendar.JDateChooser;
+
 import Daos.produtoDAO;
 import Daos.vendaProdutoDAO;
 import Models.ProdutoModel;
@@ -40,11 +42,15 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 	private ProdutoModel produto, produtoChange;
 	private ArrayList<ProdutoModel> listChange;
 	private boolean isInserting = true;
+	private JDateChooser valDate;
 	private SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+	
 
 	public frameProdutos(Connection conn) {
 		this.conn = conn;
 		produtoDao = new produtoDAO(conn);
+		valDate = new JDateChooser("dd/MM/yyyy", "##/##/####", '_');
+		valDate.setDate(new Date());
 		initComponents();
 		try {
 			fixTable();
@@ -63,7 +69,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 	// <editor-fold defaultstate="collapsed" desc="Generated
 	// Code">//GEN-BEGIN:initComponents
 	private void initComponents() {
-
+		
 		jLabel1 = new javax.swing.JLabel();
 		txtNome = new javax.swing.JTextField();
 		ComboboxProdutos = new javax.swing.JComboBox<>();
@@ -229,8 +235,8 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 																.addComponent(txtQuantidade,
 																		javax.swing.GroupLayout.PREFERRED_SIZE, 72,
 																		javax.swing.GroupLayout.PREFERRED_SIZE))
-														.addComponent(txtValidade,
-																javax.swing.GroupLayout.PREFERRED_SIZE, 80,
+														.addComponent(valDate,
+																javax.swing.GroupLayout.PREFERRED_SIZE, 120,
 																javax.swing.GroupLayout.PREFERRED_SIZE)))
 										.addGroup(layout.createSequentialGroup()
 												.addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 55,
@@ -277,7 +283,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 								javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 				.addGap(18, 18, 18)
 				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jLabel5)
-						.addComponent(txtValidade, javax.swing.GroupLayout.PREFERRED_SIZE,
+						.addComponent(valDate, javax.swing.GroupLayout.PREFERRED_SIZE,
 								javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 				.addGap(18, 18, 18).addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 268,
 						javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -298,7 +304,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 			if (isInserting) {
 				boolean flag = true;
 				if (txtNome.getText().isEmpty() || txtBarCode.getText().isEmpty() || txtQuantidade.getText().isEmpty()
-						|| txtValidade.getText().equals("__/__/____") || txtValor.getText().isEmpty()) {
+						 || txtValor.getText().isEmpty()) {
 					JOptionPane.showMessageDialog(null, "Preencha todos os campos!", "campos!",
 							JOptionPane.ERROR_MESSAGE,
 							new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
@@ -306,9 +312,9 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 					JOptionPane.showMessageDialog(null, "Selecione uma categoria", "categoria!",
 							JOptionPane.ERROR_MESSAGE,
 							new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
-				} else if (!checkDate(txtValidade.getText())) {
+				/*} else if (!checkDate(txtValidade.getText())) {
 					JOptionPane.showMessageDialog(null, "Data Inválida", "data!", JOptionPane.ERROR_MESSAGE,
-							new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
+							new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));*/
 				} else {
 					try {
 						System.out.println(produtoDao.getOneProdutoBar(txtBarCode.getText().toString()).getNome());
@@ -397,6 +403,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		txtNome.setText(null);
 		txtQuantidade.setText(null);
 		txtValidade.setText(null);
+		valDate.setDate(new Date());
 		txtValor.setText(null);
 		ComboboxProdutos.setSelectedIndex(0);
 		fixTable();
@@ -464,7 +471,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		produtoChange.setCategoria(ComboboxProdutos.getSelectedItem().toString());
 		produtoChange.setPreco(Double.valueOf(txtValor.getText()));
 		produtoChange.setQuantidade(Integer.parseInt(txtQuantidade.getText()));
-		produtoChange.setValDate(fmt.parse(txtValidade.getText()));
+		produtoChange.setValDate(valDate.getDate());
 
 	}
 

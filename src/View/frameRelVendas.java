@@ -5,15 +5,37 @@
  */
 package View;
 
+import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dimension;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 
 import Daos.produtoDAO;
@@ -54,6 +76,7 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 		dtFinal = new JDateChooser("dd/MM/yyyy", "##/##/####", '_');
 		dtFinal.setDate(new Date());
 		initComponents();
+		txtBarCode2.requestFocus();
 		try {
 			fixTable();
 			vendaChange = new VendaModel();
@@ -67,6 +90,7 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 
 	public frameRelVendas() {
 		initComponents();
+		txtBarCode2.requestFocus();
 	}
 
 	/**
@@ -81,6 +105,7 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 		jScrollPane = new javax.swing.JScrollPane();
 		jTable = new javax.swing.JTable();
 		btnBuscar = new javax.swing.JButton();
+		btnDeletar = new javax.swing.JButton();
 		btnImprimir = new javax.swing.JButton();
 		btnCancelar = new javax.swing.JButton();
 		label2 = new javax.swing.JLabel();
@@ -90,10 +115,11 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 		txtFirstDate = new javax.swing.JTextField();
 		label3 = new javax.swing.JLabel();
 		txtBarCode2 = new javax.swing.JTextField();
+		txtBarCode2.setRequestFocusEnabled(true);
 
-		jTable.setModel(new DefaultTableModel(new String[] { "Data", "Metodo de Pagamento", "Valor", }, 0) {
+		jTable.setModel(new DefaultTableModel(new String[] { "id", "Data", "Metodo de Pagamento", "Valor", }, 0) {
 
-			boolean[] canEdit = new boolean[] { false, false, false };
+			boolean[] canEdit = new boolean[] { false, false, false, false };
 
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -107,7 +133,32 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 		btnBuscar.setToolTipText("Procurar");
 		btnBuscar.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				btnBuscarActionPerformed(evt);
+				try {
+					btnBuscarActionPerformed(evt);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+
+		btnDeletar
+				.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/lixeira-de-reciclagem preta.png"))); // NOI18N
+		btnDeletar.setToolTipText("Deletar");
+		btnDeletar.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				try {
+					btnDeletarActionPerformed(evt);
+				} catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 
@@ -133,7 +184,7 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 
 		setClosable(true);
 		setIconifiable(true);
-		setTitle("Cadastro de Produtos");
+		setTitle("Relatório de Vendas");
 
 		javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
 		jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
@@ -204,20 +255,22 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addContainerGap()
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 715, Short.MAX_VALUE)
-								.addGroup(layout.createSequentialGroup().addGroup(layout
-										.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-										.addGroup(layout
-												.createSequentialGroup()
+		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout
+				.createSequentialGroup().addContainerGap()
+				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+						.addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 715, Short.MAX_VALUE)
+						.addGroup(layout.createSequentialGroup()
+								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+										.addGroup(layout.createSequentialGroup()
 												.addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 55,
 														javax.swing.GroupLayout.PREFERRED_SIZE)
 												.addGap(18, 18, 18)
 												.addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 55,
 														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addGap(18, 18, 18).addComponent(btnCancelar,
+												.addGap(18, 18, 18)
+												.addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 55,
+														javax.swing.GroupLayout.PREFERRED_SIZE)
+												.addGap(18, 18, 18).addComponent(btnDeletar,
 														javax.swing.GroupLayout.PREFERRED_SIZE, 55,
 														javax.swing.GroupLayout.PREFERRED_SIZE))
 										.addGroup(layout.createSequentialGroup().addGroup(
@@ -229,19 +282,17 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 														.addComponent(txtBarCode2,
 																javax.swing.GroupLayout.PREFERRED_SIZE, 153,
 																javax.swing.GroupLayout.PREFERRED_SIZE)
-														.addGroup(layout.createSequentialGroup()
-																.addComponent(dtInicial,
-																		javax.swing.GroupLayout.PREFERRED_SIZE, 153,
-																		javax.swing.GroupLayout.PREFERRED_SIZE)
+														.addGroup(layout.createSequentialGroup().addComponent(
+																dtInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 153,
+																javax.swing.GroupLayout.PREFERRED_SIZE)
 																.addGap(18, 18, 18).addComponent(label2)
 																.addPreferredGap(
 																		javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 																.addComponent(dtFinal,
 																		javax.swing.GroupLayout.PREFERRED_SIZE, 153,
 																		javax.swing.GroupLayout.PREFERRED_SIZE)))))
-										.addGap(0, 0, Short.MAX_VALUE)))
-						.addContainerGap())
-				.addGroup(
+								.addGap(0, 0, Short.MAX_VALUE)))
+				.addContainerGap()).addGroup(
 						layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 								.addGroup(layout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
 										.addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, 0,
@@ -257,6 +308,8 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 														javax.swing.GroupLayout.PREFERRED_SIZE)
 												.addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 43,
 														javax.swing.GroupLayout.PREFERRED_SIZE))
+										.addComponent(btnDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, 43,
+												javax.swing.GroupLayout.PREFERRED_SIZE)
 										.addGroup(layout.createSequentialGroup()
 												.addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 43,
 														javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -274,8 +327,8 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 												javax.swing.GroupLayout.PREFERRED_SIZE))
 								.addGap(18, 18, 18)
 								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-										.addComponent(label3).addComponent(txtBarCode2,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
+										.addComponent(label3)
+										.addComponent(txtBarCode2, javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.DEFAULT_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE))
 								.addGap(18, 18, 18)
@@ -291,16 +344,127 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 		pack();
 	}// </editor-fold>
 
-	private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
+	private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) throws SQLException, ParseException {
+		// TODO add your handling code here:]
+		if (txtBarCode2.getText().isEmpty()) {
+			listChange = null;
+			listChange = vendaDao.getAllVendasDates(fmt.format(dtInicial.getDate()), fmt.format(dtFinal.getDate()));
+			System.out.println(listChange.size());
+			model.setRowCount(0);
+			for (VendaModel vendaModel : listChange) {
+				InsertRow(vendaModel);
+			}
+		} else {
+			try {
+				System.out.println(1);
+				int idProduto = produtoDao.getOneProdutoBar(txtBarCode2.getText().toString()).getId();
+				System.out.println(2);
+				listChange = null;
+				listChange = vendaProdutoDao.getAllVendas(idProduto);
+				System.out.println(3);
+				System.out.println(listChange.size());
+				model.setRowCount(0);
+				for (VendaModel vendaModel : listChange) {
+					boolean flag = false;
+					if (model.getColumnCount() > 0) {
+						for (int i = 0; i < model.getRowCount(); i++) {
+							if (vendaModel.getId().toString().equals(model.getValueAt(i, 0))) {
+								flag = true;
+							}
+						}
+					}
+					if (!flag) {
+						InsertRow(vendaModel);
+					}
+				}
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Nenhum produto encontrado!", "falha!", JOptionPane.ERROR_MESSAGE,
+						new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
+			}
+			txtBarCode2.setText(null);
+		}
 	}
 
 	private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
+		// chooser
+		JFileChooser chooser = new JFileChooser();
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		chooser.setDialogTitle("Selecione o destino");
+
+		String path;
+		if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+			System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
+			System.out.println("getSelectedFile() : " + chooser.getSelectedFile());
+			String text = (String) JOptionPane.showInputDialog(null, "Informe o nome do documento:", "documento",
+					JOptionPane.DEFAULT_OPTION,
+					new javax.swing.ImageIcon(getClass().getResource("/Imagens/disquetex64.png")), null, "");
+			
+		    Rectangle layout = new Rectangle(PageSize.A4);
+		    layout.setBackgroundColor(new BaseColor(240, 217, 200));
+			Document document = new Document(layout);
+			String pathArchive = chooser.getSelectedFile()+("\\"+ text +".pdf");
+			try {
+				PdfWriter.getInstance(document, new FileOutputStream(chooser.getSelectedFile()+("\\"+ text +".pdf")));
+
+				document.open();
+				document.add(new Paragraph("\n"));
+				Paragraph p = new Paragraph("Relatório de vendas " + new Date(), FontFactory.getFont(FontFactory.TIMES_BOLD)); 
+				p.setAlignment(Element.ALIGN_CENTER);
+				document.add(p);
+				document.add(new Paragraph("\n"));
+				
+				PdfPTable table = new PdfPTable(3);
+				table.setWidthPercentage(100);
+				table.addCell("Data da Venda");
+				table.addCell("Metodo de Pagamento");
+				table.addCell("valor da Venda");
+				table.addCell(" ");
+				table.addCell(" ");
+				table.addCell(" ");
+				double valorTotal=0;
+				for (int i = 0; i < model.getRowCount(); i++) {
+					table.addCell(model.getValueAt(i, 1).toString());
+					table.addCell(model.getValueAt(i, 2).toString());
+					table.addCell(model.getValueAt(i, 3).toString());
+					valorTotal += Double.parseDouble(model.getValueAt(i, 3).toString());
+				}
+				table.addCell(" ");
+				table.addCell(" ");
+				table.addCell(" ");				
+				table.addCell(" ");
+				table.addCell("Valor Total:");
+				table.addCell(" "+valorTotal+" ");
+				
+				document.add(table);
+				
+			} catch (FileNotFoundException | DocumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				document.close();
+			}
+			try {
+				Desktop.getDesktop().open(new File(pathArchive));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("No Selection ");
+		}
 	}
 
 	private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
+		try {
+			fixTable();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		dtFinal.setDate(new Date());
+		dtInicial.setDate(new Date());
 	}
 
 	private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {
@@ -315,8 +479,33 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 		// TODO add your handling code here:
 	}
 
-	private void btnDeletarActionPerformed(java.awt.event.ActionEvent evt) {
+	private void btnDeletarActionPerformed(java.awt.event.ActionEvent evt) throws NumberFormatException, SQLException {
 		// TODO add your handling code here:
+		if (jTable.getSelectedRow() < 0) {
+			JOptionPane.showMessageDialog(null, "Nenhum produto Selecionado!", "falha!", JOptionPane.ERROR_MESSAGE,
+					new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
+		} else {
+
+			int n = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja realizar esta ação?", "Comfirmação!",
+					JOptionPane.YES_NO_OPTION, 0,
+					new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
+			if (n == 0) {
+				int idVenda = Integer.parseInt(model.getValueAt(jTable.getSelectedRow(), 0).toString());
+				System.out.println("id venda::" + idVenda);
+				ArrayList<ProdutoModel> produtos = vendaProdutoDao.getAllProdutos(idVenda);
+				System.out.println(produtos.size());
+				// vendaProdutoDao.deleteVendaProduto(idVenda, idProduto);
+				for (ProdutoModel produtoModel : produtos) {
+					vendaProdutoDao.deleteVendaProduto(idVenda, produtoModel.getId());
+				}
+				System.out.println(idVenda);
+				vendaDao.deleteVenda(idVenda);
+				model.removeRow(jTable.getSelectedRow());
+				JOptionPane.showMessageDialog(null, "Venda deletada com sucesso!!", "Sucesso!",
+						JOptionPane.INFORMATION_MESSAGE,
+						new javax.swing.ImageIcon(getClass().getResource("/Imagens/verificado.png")));
+			}
+		}
 	}
 
 	private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -360,11 +549,12 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 		for (VendaModel venda : list) {
 			InsertRow(venda);
 		}
+		txtBarCode2.requestFocus();
 	}
 
 	private void InsertRow(VendaModel venda) {
-		model.addRow(new String[] { venda.getdata().toString(), venda.getPagamento().toString(),
-				Double.toString(venda.getValor()) });
+		model.addRow(new String[] { venda.getId().toString(), venda.getdata().toString(),
+				venda.getPagamento().toString(), Double.toString(venda.getValor()) });
 
 	}
 
@@ -375,6 +565,7 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 
 	// Variables declaration - do not modify
 	private javax.swing.JButton btnBuscar;
+	private javax.swing.JButton btnDeletar;
 	private javax.swing.JButton btnCancelar;
 	private javax.swing.JButton btnImprimir;
 	private javax.swing.JInternalFrame jInternalFrame1;

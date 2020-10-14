@@ -30,7 +30,7 @@ public class vendaDAO extends BaseDAO {
 		return vendaList;
 	}
 	
-	public ArrayList<VendaModel> getAllVendasDates(Date dtInicial, Date dtFinal) throws SQLException{
+	public ArrayList<VendaModel> getAllVendasDates(String dtInicial, String dtFinal) throws SQLException{
 		ResultSet rs = null;
 		rs = this.select("*").from("vendas")
 				//where DataRegistro between "to_date( '28/04/2014', 'dd/mm/yyyy') and to_date( '28/04/2014', 'dd/mm/yyyy')"
@@ -117,8 +117,8 @@ public class vendaDAO extends BaseDAO {
 				.where("id", "=", Integer.toString((venda.getId()))).commit();
 	}
 
-	public void deleteProduto(int id) throws SQLException {
-		this.delete().from("venda").where("id", "=", "id").commit();
+	public void deleteVenda(Integer id) throws SQLException {
+		this.delete().from("vendas").where("id", "=", id.toString()).commit();
 	}
 
 }

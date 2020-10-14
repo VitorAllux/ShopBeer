@@ -3,6 +3,8 @@ package Models;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.xml.crypto.Data;
+
 public class VendaModel {
     private Integer id;
     private Date data;
@@ -55,6 +57,10 @@ public class VendaModel {
     public String getdata() {
     	return new SimpleDateFormat("dd/MM/yyyy").format(data);
         
+    }
+    
+    public Date getdata2() {
+    	return data;
     }
 
     public VendaModel setdata(Date data) {
