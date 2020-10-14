@@ -13,6 +13,8 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
@@ -71,6 +73,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		btnCancelar = new javax.swing.JButton();
 		jLabel2 = new javax.swing.JLabel();
 		txtBarCode = new javax.swing.JTextField();
+		txtValidade = new javax.swing.JTextField();
 		jLabel3 = new javax.swing.JLabel();
 		txtValor = new javax.swing.JTextField();
 		jLabel4 = new javax.swing.JLabel();
@@ -158,6 +161,12 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 			}
 		});
 
+		txtValidade.setToolTipText("");
+		txtValidade.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				txtBarCodeActionPerformed(evt);
+			}
+		});
 
 		jLabel3.setText("Valor");
 
@@ -297,6 +306,9 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 					JOptionPane.showMessageDialog(null, "Selecione uma categoria", "categoria!",
 							JOptionPane.ERROR_MESSAGE,
 							new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
+				} else if (!checkDate(txtValidade.getText())) {
+					JOptionPane.showMessageDialog(null, "Data Inválida", "data!", JOptionPane.ERROR_MESSAGE,
+							new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
 				} else {
 					try {
 						System.out.println(produtoDao.getOneProdutoBar(txtBarCode.getText().toString()).getNome());
@@ -305,15 +317,16 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 						flag = false;
 
 					}
-					if(flag == false) {
+					if (flag == false) {
 						getFields();
 						produtoDao.createProduto(produtoChange);
 						btnCancelar.doClick();
 						JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!!", "Sucesso!",
 								JOptionPane.INFORMATION_MESSAGE,
 								new javax.swing.ImageIcon(getClass().getResource("/Imagens/verificado.png")));
-					}else {
-						JOptionPane.showMessageDialog(null, "Produto ja cadastrado!", "falha!", JOptionPane.ERROR_MESSAGE,
+					} else {
+						JOptionPane.showMessageDialog(null, "Produto ja cadastrado!", "falha!",
+								JOptionPane.ERROR_MESSAGE,
 								new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
 					}
 				}
@@ -394,6 +407,10 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		// TODO add your handling code here:
 	}// GEN-LAST:event_txtBarCodeActionPerformed
 
+	private void txtValidadeActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtBarCodeActionPerformed
+		// TODO add your handling code here:
+	}// GEN-LAST:event_txtBarCodeActionPerformed
+
 	private void txtValorActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtValorActionPerformed
 		// TODO add your handling code here:
 	}// GEN-LAST:event_txtValorActionPerformed
@@ -405,6 +422,20 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 	public void setPosicao() {
 		Dimension d = this.getDesktopPane().getSize();
 		this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
+	}
+
+	private boolean checkDate(String data) {
+		SimpleDateFormat sf = fmt;
+		sf.setLenient(false);
+		try {
+			Date dp = sf.parse(data);
+			System.out.println("data valida!");
+			return true;
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("data invalida!");
+			return false;
+		}
 	}
 
 	private void fixTable() throws SQLException {
@@ -419,8 +450,8 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 	}
 
 	private void InsertRow(ProdutoModel produto) {
-		model.addRow(new String[] { produto.getBarCode(), produto.getNome(),
-				Double.toString(produto.getPreco()), Integer.toString(produto.getQuantidade()), produto.getValDate() });
+		model.addRow(new String[] { produto.getBarCode(), produto.getNome(), Double.toString(produto.getPreco()),
+				Integer.toString(produto.getQuantidade()), produto.getValDate() });
 
 	}
 
@@ -443,14 +474,14 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 			if (!listChange.get(i).getNome().equals(model.getValueAt(i, 1).toString())
 					|| !(listChange.get(i).getBarCode().equals(model.getValueAt(i, 0).toString()))
 					|| !(listChange.get(i).getPreco() == Double.parseDouble(model.getValueAt(i, 2).toString()))
-					|| !(listChange.get(i).getQuantidade() ==Integer.parseInt(model.getValueAt(i, 3).toString()))
+					|| !(listChange.get(i).getQuantidade() == Integer.parseInt(model.getValueAt(i, 3).toString()))
 					|| !(listChange.get(i).getValDate().equals(model.getValueAt(i, 4).toString()))) {
-					return false;
+				return false;
 			}
 		}
 		return true;
 	}
-	
+
 	private void fazUpdate() throws ParseException, SQLException {
 		ProdutoModel produto = new ProdutoModel();
 		for (int i = 0; i < model.getRowCount(); i++) {
@@ -459,15 +490,15 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 					|| !(listChange.get(i).getPreco() == Double.parseDouble(model.getValueAt(i, 2).toString()))
 					|| !(listChange.get(i).getQuantidade() == Integer.parseInt(model.getValueAt(i, 3).toString()))
 					|| !(listChange.get(i).getValDate().equals(fmt.parse(model.getValueAt(i, 4).toString())))) {
-					produto.setId(listChange.get(i).getId());
-					produto.setNome(model.getValueAt(i, 1).toString());
-					produto.setCategoria(listChange.get(i).getCategoria());
-					produto.setBarCode(model.getValueAt(i, 0).toString());
-					produto.setPreco(Double.parseDouble(model.getValueAt(i, 2).toString()));
-					produto.setQuantidade(Integer.parseInt(model.getValueAt(i, 3).toString()));
-					produto.setValDate(fmt.parse((String) model.getValueAt(i, 4)));
-					produtoDao.updateProduto(produto);
-					produto = new ProdutoModel();
+				produto.setId(listChange.get(i).getId());
+				produto.setNome(model.getValueAt(i, 1).toString());
+				produto.setCategoria(listChange.get(i).getCategoria());
+				produto.setBarCode(model.getValueAt(i, 0).toString());
+				produto.setPreco(Double.parseDouble(model.getValueAt(i, 2).toString()));
+				produto.setQuantidade(Integer.parseInt(model.getValueAt(i, 3).toString()));
+				produto.setValDate(fmt.parse((String) model.getValueAt(i, 4)));
+				produtoDao.updateProduto(produto);
+				produto = new ProdutoModel();
 			}
 		}
 	}

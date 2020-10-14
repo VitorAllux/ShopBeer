@@ -33,6 +33,7 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 	/**
 	 * Creates new form frameProdutos
 	 */
+	
 
 	/**
 	 * Creates new form FrameVendas
@@ -109,7 +110,7 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 
 		jLabel2.setText("Produto:");
 
-		JTable.setModel(new DefaultTableModel(new String[] { "Codigo", "Nome", "Valor", "Duantidade" }, 0) {
+		JTable.setModel(new DefaultTableModel(new String[] { "Codigo", "Nome", "Valor", "Quantidade" }, 0) {
 
 			boolean[] canEdit = new boolean[] { false, false, false, true };
 
@@ -129,8 +130,10 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 						JOptionPane.showMessageDialog(null, "Valor invalido!", "falha!", JOptionPane.ERROR_MESSAGE,
 								new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
 						model.setValueAt(1, JTable.getEditingRow(), 3);
+						txtBarcode.requestFocus();
 					} else {
 						atualizaValor();
+						txtBarcode.requestFocus();
 					}
 			}
 		});

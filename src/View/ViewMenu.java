@@ -8,6 +8,8 @@ package View;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.URL;
 import java.sql.Connection;
 
@@ -65,7 +67,6 @@ public class ViewMenu extends javax.swing.JFrame {
         setResizable(false);
         setSize(new java.awt.Dimension(1500, 70));
         getContentPane().setLayout(null);
-
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/cerveja.png"))); // NOI18N
         jLabel1.setFocusable(false);
@@ -121,6 +122,18 @@ public class ViewMenu extends javax.swing.JFrame {
 
         mVendasRelatorioVendas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/relatorio-de-venda.png"))); // NOI18N
         mVendasRelatorioVendas.setText("Relatório de Vendas");
+        mVendasRelatorioVendas.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+		        frameRelVendas frelvendas = new frameRelVendas(conn);
+		        jDesktopPane2.add(frelvendas);
+		        frelvendas.setPosicao();
+		        frelvendas.show();
+				
+			}
+		});
         mVendas.add(mVendasRelatorioVendas);
 
         jMenuBar1.add(mVendas);

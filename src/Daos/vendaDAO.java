@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import Models.VendaModel;
 
@@ -24,6 +25,22 @@ public class vendaDAO extends BaseDAO {
 			if (result.getInt("id") > 0) {
 				vendaList.add(new VendaModel().setId(result.getInt("id")).setdata(result.getDate("data"))
 						.setValor(result.getDouble("valor")).setPagamento(result.getString("pagamento")));
+			}
+		}
+		return vendaList;
+	}
+	
+	public ArrayList<VendaModel> getAllVendasDates(Date dtInicial, Date dtFinal) throws SQLException{
+		ResultSet rs = null;
+		rs = this.select("*").from("vendas")
+				//where DataRegistro between "to_date( '28/04/2014', 'dd/mm/yyyy') and to_date( '28/04/2014', 'dd/mm/yyyy')"
+				.where("data", "BETWEEN", "to_date('"+dtInicial+"', 'dd/mm/yyyy') and to_date('" +dtFinal+"', 'dd/mm/yyyy')")
+				.apply();
+		ArrayList<VendaModel> vendaList = new ArrayList<VendaModel>();
+		while(rs.next()) {
+			if (rs.getInt("id") > 0 ) {
+				vendaList.add(new VendaModel().setId(rs.getInt("id")).setdata(rs.getDate("data"))
+						.setValor(rs.getDouble("valor")).setPagamento(rs.getString("pagamento")));
 			}
 		}
 		return vendaList;
