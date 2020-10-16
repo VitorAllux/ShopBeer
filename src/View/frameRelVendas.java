@@ -20,9 +20,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -166,7 +168,12 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 		btnImprimir.setToolTipText("Imprimir");
 		btnImprimir.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				btnImprimirActionPerformed(evt);
+				try {
+					btnImprimirActionPerformed(evt);
+				} catch (NumberFormatException | SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 
@@ -385,7 +392,7 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 		}
 	}
 
-	private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {
+	private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) throws NumberFormatException, SQLException {
 		// TODO add your handling code here:
 		// chooser
 		JFileChooser chooser = new JFileChooser();
@@ -413,17 +420,23 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 				p.setAlignment(Element.ALIGN_CENTER);
 				document.add(p);
 				document.add(new Paragraph("\n"));
-				
-				PdfPTable table = new PdfPTable(3);
+				p = new Paragraph("Data Inicial: " + fmt.format(dtInicial.getDate()) + " ---- Data Final: " + fmt.format(dtFinal.getDate()));
+				p.setAlignment(Element.ALIGN_CENTER);
+				document.add(p);
+				document.add(new Paragraph("\n"));
+				PdfPTable table = new PdfPTable(4);
 				table.setWidthPercentage(100);
+				table.addCell("Id da Venda");
 				table.addCell("Data da Venda");
 				table.addCell("Metodo de Pagamento");
 				table.addCell("valor da Venda");
 				table.addCell(" ");
 				table.addCell(" ");
 				table.addCell(" ");
+				table.addCell(" ");
 				double valorTotal=0;
 				for (int i = 0; i < model.getRowCount(); i++) {
+					table.addCell(model.getValueAt(i, 0).toString());
 					table.addCell(model.getValueAt(i, 1).toString());
 					table.addCell(model.getValueAt(i, 2).toString());
 					table.addCell(model.getValueAt(i, 3).toString());
@@ -431,12 +444,37 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 				}
 				table.addCell(" ");
 				table.addCell(" ");
-				table.addCell(" ");				
+				table.addCell(" ");	
+				table.addCell(" ");	
+				table.addCell(" ");	
 				table.addCell(" ");
 				table.addCell("Valor Total:");
 				table.addCell(" "+valorTotal+" ");
-				
 				document.add(table);
+				document.add(new Paragraph("\n\n"));
+				
+
+				PdfPTable table2 = new PdfPTable(2);
+				table2.setWidthPercentage(50);
+				table2.addCell("Id da venda");
+				table2.addCell("Produtos");
+				table2.addCell(" ");
+				table2.addCell(" ");
+				ArrayList<ProdutoModel> list = new ArrayList<ProdutoModel>();
+				for (int i = 0; i < model.getRowCount(); i++) {
+					list = vendaProdutoDao.getAllProdutos(Integer.parseInt(model.getValueAt(i, 0).toString()));
+					table2.addCell(model.getValueAt(i, 0).toString());
+					table2.addCell(" ");
+					for (ProdutoModel produtoModel : list) {
+						table2.addCell(" ");
+						table2.addCell(produtoModel.getNome());
+					}
+				}
+
+				
+				
+
+				document.add(table2);
 				
 			} catch (FileNotFoundException | DocumentException e) {
 				// TODO Auto-generated catch block

@@ -29,6 +29,8 @@ public class FrameLogin extends javax.swing.JFrame {
      */
     public FrameLogin() {
         initComponents();
+        txtPassword.setText("admin");
+        txtUser.setText("admin");
         
     }
 
@@ -154,7 +156,7 @@ public class FrameLogin extends javax.swing.JFrame {
         // TODO add your handling code here:
         ConnectionFactory conect = new ConnectionFactory();
         Connection conn = null;
-        /*if(txtUser.getText().isEmpty() || txtPassword.getText().isEmpty()) {
+        if(txtUser.getText().isEmpty() || txtPassword.getText().isEmpty()) {
         	JOptionPane.showMessageDialog(null, "Informe login e senha!","Inválido!",JOptionPane.ERROR_MESSAGE,new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
         } else {
         	try {
@@ -170,13 +172,13 @@ public class FrameLogin extends javax.swing.JFrame {
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
-        }*/
+        }
 
 
-        conn = conect.getConnection("BeerDB","postgres","318463-Vitor");
+        /*conn = conect.getConnection("BeerDB","postgres","318463-Vitor");
 		ViewMenu menu = new ViewMenu(conn);
 		this.setVisible(false);
-		menu.setVisible(true);
+		menu.setVisible(true);*/
     	
     	
     	

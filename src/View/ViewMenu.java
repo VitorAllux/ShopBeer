@@ -56,7 +56,10 @@ public class ViewMenu extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mMenuSair = new javax.swing.JMenuItem();
         mVendas = new javax.swing.JMenu();
+        mFerramentas = new javax.swing.JMenu();
         mVendasVendas = new javax.swing.JMenuItem();
+        miBackup = new javax.swing.JMenuItem();
+        miRestore = new javax.swing.JMenuItem();
         mVendasRelatorioVendas = new javax.swing.JMenuItem();
         mAjuda = new javax.swing.JMenu();
         mAjudaAjuda = new javax.swing.JMenuItem();
@@ -137,6 +140,31 @@ public class ViewMenu extends javax.swing.JFrame {
         mVendas.add(mVendasRelatorioVendas);
 
         jMenuBar1.add(mVendas);
+        
+        
+        mFerramentas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/ferramentasx24.png"))); // NOI18N
+        mFerramentas.setText("Ferramentas");
+        mFerramentas.setToolTipText("Ferramentas");
+
+        miBackup.setText("Backup");
+        miBackup.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/copia-de-segurancax24.png"))); // NOI18N
+        miBackup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miBackupActionPerformed(evt);
+            }
+        });
+        mFerramentas.add(miBackup);
+
+        miRestore.setText("Restore");
+        miRestore.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/restaurarx24.png"))); // NOI18N
+        miRestore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miRestoreActionPerformed(evt);
+            }
+        });
+        mFerramentas.add(miRestore);
+        jMenuBar1.add(mFerramentas);
+
 
         mAjuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/computador-desktop.png"))); // NOI18N
         mAjuda.setText("Ajuda");
@@ -174,6 +202,22 @@ public class ViewMenu extends javax.swing.JFrame {
         fvendas.setPosicao();
         fvendas.show();
     }//GEN-LAST:event_mVendasVendasActionPerformed
+    
+    private void miRestoreActionPerformed(java.awt.event.ActionEvent evt) {                                          
+        // TODO add your handling code here:
+    	
+    }  
+    
+    private void miBackupActionPerformed(java.awt.event.ActionEvent evt) {                                          
+        // TODO add your handling code here:
+    	
+    	frameBackup f = new frameBackup();
+    	jDesktopPane2.add(f);
+    	f.setPosicao();
+    	f.show();
+    }                                         
+
+
 
     /**
      * @param args the command line arguments
@@ -222,6 +266,9 @@ public class ViewMenu extends javax.swing.JFrame {
     private javax.swing.JMenu mMenu;
     private javax.swing.JMenuItem mMenuProdutos;
     private javax.swing.JMenuItem mMenuSair;
+    private javax.swing.JMenu mFerramentas;
+    private javax.swing.JMenuItem miBackup;
+    private javax.swing.JMenuItem miRestore;
     private javax.swing.JMenuItem mMenuUsuario;
     private javax.swing.JMenu mVendas;
     private javax.swing.JMenuItem mVendasRelatorioVendas;

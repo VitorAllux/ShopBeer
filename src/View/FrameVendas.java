@@ -84,7 +84,7 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 		JTable = new javax.swing.JTable();
 		txtBarcode = new javax.swing.JTextField();
 		btnDeletar = new javax.swing.JButton();
-		btnSalvar1 = new javax.swing.JButton();
+		btnAdicionar = new javax.swing.JButton();
 		txtValor = new javax.swing.JTextField();
 		jLabel3 = new javax.swing.JLabel();
 		btnCancelar = new javax.swing.JButton();
@@ -160,9 +160,9 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 			}
 		});
 
-		btnSalvar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/adicionar.png"))); // NOI18N
-		btnSalvar1.setToolTipText("Adicionar");
-		btnSalvar1.addActionListener(new java.awt.event.ActionListener() {
+		btnAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/adicionar.png"))); // NOI18N
+		btnAdicionar.setToolTipText("Adicionar");
+		btnAdicionar.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				btnSalvar1ActionPerformed(evt);
 			}
@@ -235,7 +235,7 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 												javax.swing.GroupLayout.PREFERRED_SIZE))
 								.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 						.addGroup(layout.createSequentialGroup()
-								.addComponent(btnSalvar1, javax.swing.GroupLayout.PREFERRED_SIZE, 55,
+								.addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 55,
 										javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 								.addComponent(btnDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, 50,
@@ -269,7 +269,7 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 								javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addGap(18, 18, 18)
 						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addComponent(btnSalvar1, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+								.addComponent(btnAdicionar, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
 								.addComponent(btnDeletar, javax.swing.GroupLayout.DEFAULT_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 								.addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE,
@@ -378,6 +378,7 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 					* Double.parseDouble(model.getValueAt(i, 3).toString()));
 		}
 		txtValor.setText(String.valueOf(valor));
+		atualizaValor();
 		txtBarcode.setText(null);
 
 	}// GEN-LAST:event_btnSalvar1ActionPerformed
@@ -417,6 +418,7 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 				vendaChange.setdata(fmt.parse(txtData.getText()));
 				vendaChange.setPagamento(ComboPagamento.getSelectedItem().toString());
 				vendaChange.setValor(valorTotal);
+				//System.out.println(vendaChange.getdata() + "    " + vendaChange.getPagamento() + "     " + vendaChange.getValor());
 				int idVenda = vendaDao.createVenda(vendaChange);
 				
 				//crate vendaproduto
@@ -436,6 +438,7 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 					System.out.println(produto.getQuantidade());
 					produtoDao.updateProduto(produto);
 				}
+				listChange = new ArrayList<ProdutoModel>();
 				txtValor.setText(null);
 				model.setRowCount(0);
 			}
@@ -455,7 +458,7 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 	private javax.swing.JButton btnCancelar;
 	private javax.swing.JButton btnVender;
 	private javax.swing.JButton btnDeletar;
-	private javax.swing.JButton btnSalvar1;
+	private javax.swing.JButton btnAdicionar;
 	private javax.swing.JLabel jLabel1;
 	private javax.swing.JLabel jLabel2;
 	private javax.swing.JLabel jLabel3;
