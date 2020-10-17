@@ -205,13 +205,17 @@ public class ViewMenu extends javax.swing.JFrame {
     
     private void miRestoreActionPerformed(java.awt.event.ActionEvent evt) {                                          
         // TODO add your handling code here:
+    	frameRestore f = new frameRestore(conn);
+    	jDesktopPane2.add(f);
+    	f.setPosicao();
+    	f.show();
     	
     }  
     
     private void miBackupActionPerformed(java.awt.event.ActionEvent evt) {                                          
         // TODO add your handling code here:
     	
-    	frameBackup f = new frameBackup();
+    	frameBackup f = new frameBackup(conn);
     	jDesktopPane2.add(f);
     	f.setPosicao();
     	f.show();

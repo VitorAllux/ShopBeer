@@ -14,31 +14,25 @@ public class PostgresRestore {
     JFileChooser open; 
     final List<String> comandos = new ArrayList<String>();
     
-    public PostgresRestore(String dirBackup, String pgRestore, String nomeBanco, String senhaBanco)
+    public PostgresRestore(String dirBackup, String pgRestore, String nomeBanco, String senhaBanco, String user, String ip,String porta)
     {
-        open = new JFileChooser(new File("Documentos")); 
-            int op = open.showOpenDialog(null);   
-            if(op == JFileChooser.APPROVE_OPTION){
-               File arq = open.getSelectedFile(); 
-              // String nomeDoArquivo = open.getName(arq);
-               String pathDoArquivo = arq.toString(); 
-               
+
            final List<String> comandos = new ArrayList<String>();      
-           comandos.add("pgRestore");
+           comandos.add(pgRestore);
 
            comandos.add("-h");      
-           comandos.add("localhost");      
+           comandos.add(ip);      
            comandos.add("-p");      
-           comandos.add("5432");      
+           comandos.add(porta);      
            comandos.add("-U");      
-           comandos.add("postgres");
+           comandos.add(user);
            comandos.add("-c");
            comandos.add("-d");
            comandos.add(nomeBanco);     
            comandos.add("-v");      
              
         
-           comandos.add(pathDoArquivo);
+           comandos.add(dirBackup);
            ProcessBuilder pb = new ProcessBuilder(comandos);      
            pb.environment().put("PGPASSWORD", senhaBanco);        
            try {      
@@ -63,8 +57,5 @@ public class PostgresRestore {
            } catch (InterruptedException ie) {      
                ie.printStackTrace();      
            }         
-            } else{
-                
-            }
     }
 }

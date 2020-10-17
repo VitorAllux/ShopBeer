@@ -10,14 +10,14 @@ import javax.swing.JOptionPane;
 
 public class PostgresBackup {
 
-	public PostgresBackup(String localSave,String localDump, String nomeBanco, String senhaBanco, String user) {
+	public PostgresBackup(String localSave,String localDump, String nomeBanco, String senhaBanco, String user, String ip, String porta) {
 		final List<String> comandos = new ArrayList<String>();
 		comandos.add(localDump);
 
 		comandos.add("-h");
-		comandos.add("localhost");
+		comandos.add(ip);
 		comandos.add("-p");
-		comandos.add("5432");
+		comandos.add(porta);
 		comandos.add("-U");
 		comandos.add(user);
 		comandos.add("-F");
