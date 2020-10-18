@@ -17,6 +17,7 @@ public class ProdutoModel {
     private String nome;
     private String categoria;
     private Double preco;
+    private Double precoCusto;
 	private int quantidade;
     private String barCode;
     private Date valDate;
@@ -25,6 +26,7 @@ public class ProdutoModel {
     	id = 0;
     	nome = "";
     	categoria = "";
+    	precoCusto = (double) 0;
     	preco = (double) 0;
     	quantidade = 0;
     	barCode = "";
@@ -36,6 +38,7 @@ public class ProdutoModel {
     	this.nome = produto.getNome();
     	this.categoria = produto.getCategoria();
     	this.preco = produto.getPreco();
+    	this.precoCusto = produto.getPrecoCusto();
     	this.quantidade = produto.getQuantidade();
     	this.barCode = produto.getBarCode();
     }
@@ -77,6 +80,16 @@ public class ProdutoModel {
 
     public ProdutoModel setPreco(Double preco) {
         this.preco = preco;
+		return this;
+
+    }
+    
+    public Double getPrecoCusto() {
+        return precoCusto;
+    }
+
+    public ProdutoModel setPrecoCusto(Double precoCusto) {
+        this.precoCusto = precoCusto;
 		return this;
 
     }

@@ -118,7 +118,6 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 		label3 = new javax.swing.JLabel();
 		txtBarCode2 = new javax.swing.JTextField();
 		txtBarCode2.setRequestFocusEnabled(true);
-		
 
 		jTable.setModel(new DefaultTableModel(new String[] { "id", "Data", "Metodo de Pagamento", "Valor", }, 0) {
 
@@ -129,12 +128,12 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 				// TODO Auto-generated method stub
 				return canEdit[column];
 			}
-			
+
 		});
 
 		jScrollPane.setViewportView(jTable);
 
-		jTable2.setModel(new DefaultTableModel(new String[] { "Produto", "Quantidade",}, 0) {
+		jTable2.setModel(new DefaultTableModel(new String[] { "Produto", "Quantidade", }, 0) {
 
 			boolean[] canEdit = new boolean[] { false, false };
 
@@ -203,29 +202,29 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 		label2.setText("Data Final:");
 
 		label1.setText("Data Inicial:");
-		
+
 		jTable.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
 					try {
-					
-					model2.setRowCount(0);
-					int idVenda = Integer.parseInt(model.getValueAt(jTable.getSelectedRow(), 0).toString());
-					ArrayList<ProdutoModel> list = vendaProdutoDao.getAllProdutos(idVenda);
-					int i = 0;
-					for (ProdutoModel produtoModel : list) {
-						
-						vendaProdutoModel vp = vendaProdutoDao.getOneVendaProduto(idVenda, produtoModel.getId());
-						System.out.println(produtoModel.getNome() + "------" + idVenda);
-						model2.addRow(new String[] { produtoModel.getNome(), vp.getQuantidade().toString() });
 
-					}
+						model2.setRowCount(0);
+						int idVenda = Integer.parseInt(model.getValueAt(jTable.getSelectedRow(), 0).toString());
+						ArrayList<ProdutoModel> list = vendaProdutoDao.getAllProdutos(idVenda);
+						int i = 0;
+						for (ProdutoModel produtoModel : list) {
+
+							vendaProdutoModel vp = vendaProdutoDao.getOneVendaProduto(idVenda, produtoModel.getId());
+							System.out.println(produtoModel.getNome() + "------" + idVenda);
+							model2.addRow(new String[] { produtoModel.getNome(), vp.getQuantidade().toString() });
+
+						}
 					} catch (Exception e2) {
 						// TODO: handle exception
 					}
 				}
 			}
-				
+
 		});
 
 		setClosable(true);
@@ -305,10 +304,10 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 				.createSequentialGroup().addContainerGap()
 				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 						.addGroup(layout.createSequentialGroup()
-						.addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE)
-						.addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))
+								.addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE)
+								.addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))
 						.addGroup(layout.createSequentialGroup()
-								
+
 								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 										.addGroup(layout.createSequentialGroup()
 												.addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 55,
@@ -322,8 +321,9 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 												.addGap(18, 18, 18).addComponent(btnDeletar,
 														javax.swing.GroupLayout.PREFERRED_SIZE, 55,
 														javax.swing.GroupLayout.PREFERRED_SIZE))
-										.addGroup(layout.createSequentialGroup().addGroup(
-												layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+										.addGroup(layout.createSequentialGroup()
+												.addGroup(layout
+														.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 														.addComponent(label1).addComponent(label3))
 												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 												.addGroup(layout
@@ -331,9 +331,10 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 														.addComponent(txtBarCode2,
 																javax.swing.GroupLayout.PREFERRED_SIZE, 153,
 																javax.swing.GroupLayout.PREFERRED_SIZE)
-														.addGroup(layout.createSequentialGroup().addComponent(
-																dtInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 153,
-																javax.swing.GroupLayout.PREFERRED_SIZE)
+														.addGroup(layout.createSequentialGroup()
+																.addComponent(dtInicial,
+																		javax.swing.GroupLayout.PREFERRED_SIZE, 153,
+																		javax.swing.GroupLayout.PREFERRED_SIZE)
 																.addGap(18, 18, 18).addComponent(label2)
 																.addPreferredGap(
 																		javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -381,13 +382,16 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 												javax.swing.GroupLayout.DEFAULT_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE))
 								.addGap(18, 18, 18)
-				                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
-				                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				     
-								.addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
-								.addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE))
-				                .addContainerGap())
-								
+								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21,
+										Short.MAX_VALUE)
+								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+
+										.addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 320,
+												Short.MAX_VALUE)
+										.addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 320,
+												Short.MAX_VALUE))
+								.addContainerGap())
+
 				.addGroup(
 						layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 								.addGroup(layout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
@@ -400,7 +404,11 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 
 	private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) throws SQLException, ParseException {
 		// TODO add your handling code here:]
-		if (txtBarCode2.getText().isEmpty()) {
+		if (!comparaData(dtInicial.getDate(), dtFinal.getDate())) {
+			JOptionPane.showMessageDialog(null, "Data inicial maior que data final", "falha!",
+					JOptionPane.ERROR_MESSAGE,
+					new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
+		} else if (txtBarCode2.getText().isEmpty()) {
 			listChange = null;
 			listChange = vendaDao.getAllVendasDates(fmt.format(dtInicial.getDate()), fmt.format(dtFinal.getDate()));
 			System.out.println(listChange.size());
@@ -408,6 +416,7 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 			for (VendaModel vendaModel : listChange) {
 				InsertRow(vendaModel);
 			}
+
 		} else {
 			try {
 				System.out.println(1);
@@ -437,6 +446,7 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 			}
 			txtBarCode2.setText(null);
 		}
+
 	}
 
 	private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) throws NumberFormatException, SQLException {
@@ -633,8 +643,6 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 	private void txtBarCode2ActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
 	}
-	
-	
 
 	private void fixTable() throws SQLException {
 		this.model = (DefaultTableModel) jTable.getModel();
@@ -659,6 +667,16 @@ public class frameRelVendas extends javax.swing.JInternalFrame {
 	public void setPosicao() {
 		Dimension d = this.getDesktopPane().getSize();
 		this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
+	}
+
+	public boolean comparaData(Date dti, Date dtf) {
+		if (dti.after(dtf)) {
+			System.out.println("retorno false");
+			return false;
+		} else {
+			System.out.println("retorno true");
+			return true;
+		}
 	}
 
 	// Variables declaration - do not modify

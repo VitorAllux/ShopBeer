@@ -66,7 +66,7 @@ public class ViewMenu extends javax.swing.JFrame {
         mAjudaSobre = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1050, 700));
+        setMinimumSize(new java.awt.Dimension(1050, 800));
         setResizable(false);
         setSize(new java.awt.Dimension(1500, 70));
         getContentPane().setLayout(null);
@@ -108,6 +108,11 @@ public class ViewMenu extends javax.swing.JFrame {
         mMenuSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/sair.png"))); // NOI18N
         mMenuSair.setText("Sair");
         mMenu.add(mMenuSair);
+        mMenuSair.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+               System.exit(1);
+            }
+         });
 
         jMenuBar1.add(mMenu);
 
@@ -173,7 +178,20 @@ public class ViewMenu extends javax.swing.JFrame {
         mAjuda.add(mAjudaAjuda);
 
         mAjudaSobre.setText("Sobre");
+        mAjudaSobre.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+		        frameSobre frameSobre = new frameSobre();
+		        jDesktopPane2.add(frameSobre);
+		        frameSobre.setPosicao();
+		        frameSobre.show();
+				
+			}
+		});
         mAjuda.add(mAjudaSobre);
+        
 
         jMenuBar1.add(mAjuda);
 
