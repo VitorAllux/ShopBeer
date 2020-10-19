@@ -18,6 +18,7 @@ public class frameSobre extends javax.swing.JInternalFrame {
      */
     public frameSobre() {
         initComponents();
+        setClosable(true);
     }
 
     /**

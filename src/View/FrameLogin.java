@@ -46,7 +46,7 @@ public class FrameLogin extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtUser = new javax.swing.JTextField();
-        txtPassword = new javax.swing.JTextField();
+        txtPassword = new javax.swing.JPasswordField();
         btnLogin = new javax.swing.JButton();
         btnSair = new javax.swing.JButton();
 
@@ -175,12 +175,7 @@ public class FrameLogin extends javax.swing.JFrame {
         }
 
 
-        /*conn = conect.getConnection("BeerDB","postgres","318463-Vitor");
-		ViewMenu menu = new ViewMenu(conn);
-		this.setVisible(false);
-		menu.setVisible(true);*/
-    	
-    	
+
     	
     }//GEN-LAST:event_btnLoginActionPerformed
 
@@ -209,14 +204,7 @@ public class FrameLogin extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(FrameLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
+
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -224,29 +212,7 @@ public class FrameLogin extends javax.swing.JFrame {
                 new FrameLogin().setVisible(true);
             }
         });
-       /* ConnectionFactory conect = new ConnectionFactory();
-        Connection conn = conect.getConnection("BeerDB","postgres","318463-Vitor");
-		 vendaProdutoDAO vendaproduto = new vendaProdutoDAO(conn);
-	        produtoDAO produtoDao = new produtoDAO(conn);
-	        System.out.println("arroz");
-	        try {
-				System.out.println(produtoDao.getAllProducts().size());
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	        try {
-				vendaproduto.createVendaProduto(produtoDao.getAllProducts(), 1);
-				ArrayList<vendaProdutoModel> produto = vendaproduto.getAllVendaProduto(1);
-				ArrayList<ProdutoModel> produtomodel = vendaproduto.getAllProdutos(1);
-				System.out.println(produto.size());
-				for (ProdutoModel p : produtomodel) {
-					System.out.println(p.getNome());
-				}
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}*/
+
        
 
     }
@@ -257,6 +223,6 @@ public class FrameLogin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField txtUser;
-    private javax.swing.JTextField txtPassword;
+    private javax.swing.JPasswordField txtPassword;
     // End of variables declaration//GEN-END:variables
 }
