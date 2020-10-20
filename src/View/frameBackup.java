@@ -13,12 +13,6 @@ import java.sql.SQLException;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Rectangle;
 
 import BackupAndRestore.PostgresBackup;
 import Daos.ConfigDAO;
@@ -34,7 +28,6 @@ public class frameBackup extends javax.swing.JInternalFrame {
 	 * Creates new form frameBackup
 	 */
 	public frameBackup(Connection conn) {
-		this.conn = conn;
 		initComponents();
 		configDao = new ConfigDAO(conn);
 
@@ -55,18 +48,10 @@ public class frameBackup extends javax.swing.JInternalFrame {
 	 */
 
 	private String dirSave;
-	private String dirDump;
-	private String nome;
-	private String user;
-	private String senha;
 	private String nomeArquivo = "";
-	private String ip;
-	private String porta;
 	private ConfigDAO configDao;
 	private ConfigModel config;
-	private Connection conn;
-
-	@SuppressWarnings("unchecked")
+	
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">
 	private void initComponents() {
 
@@ -313,13 +298,12 @@ public class frameBackup extends javax.swing.JInternalFrame {
 				new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents"));
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setDialogTitle("Selecione o diretorio do pg_dump");
-		String path;
 		if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 			if (!chooser.getSelectedFile().getName().equals("pg_dump.exe")) {
 				JOptionPane.showMessageDialog(null, "Arquivo inválido", "Inválido!", JOptionPane.ERROR_MESSAGE,
 						new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
 			} else {
-				dirDump = chooser.getSelectedFile().getPath();
+				chooser.getSelectedFile().getPath();
 				txtDirDump.setText(chooser.getSelectedFile().getPath());
 			}
 		}
@@ -348,7 +332,7 @@ public class frameBackup extends javax.swing.JInternalFrame {
 			if(!formato.equals(".sql")) {
 				dirSave = dirSave + ".sql";	
 			}	
-			PostgresBackup pkb = new PostgresBackup(dirSave.replace(" ", ""), txtDirDump.getText().toString().replace(" ", ""),
+			new PostgresBackup(dirSave.replace(" ", ""), txtDirDump.getText().toString().replace(" ", ""),
 					txtNome.getText().toString().replace(" ", ""), txtSenha.getText().toString().replace(" ", ""), txtUsuario.getText().toString().replace(" ", ""),
 					txtIp.getText().toString().replace(" ", ""), txtPorta.getText().toString().replace(" ", ""), 0 );
 
@@ -361,7 +345,6 @@ public class frameBackup extends javax.swing.JInternalFrame {
 				new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents"));
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooser.setDialogTitle("Selecione o destino");
-		String path;
 		if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 			String text = (String) JOptionPane.showInputDialog(null, "Informe o nome do documento:", "documento",
 					JOptionPane.DEFAULT_OPTION,

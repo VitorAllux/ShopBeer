@@ -39,7 +39,6 @@ import com.toedter.calendar.JDateChooser;
 import Daos.produtoDAO;
 import Daos.vendaProdutoDAO;
 import Models.ProdutoModel;
-import Models.vendaProdutoModel;
 
 /**
  *
@@ -48,13 +47,17 @@ import Models.vendaProdutoModel;
 public class frameProdutos extends javax.swing.JInternalFrame {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
 	 * Creates new form frameProdutos
 	 */
 	private Connection conn;
 	private produtoDAO produtoDao;
 	private vendaProdutoDAO vendaProdutoDao;
 	private DefaultTableModel model;
-	private ProdutoModel produto, produtoChange;
+	private ProdutoModel produtoChange;
 	private ArrayList<ProdutoModel> listChange;
 	private boolean isInserting = true;
 	private JDateChooser valDate;
@@ -120,6 +123,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		jLabel1.setText("Nome do produto");
 
 		txtNome.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				txtNomeActionPerformed(evt);
 			}
@@ -131,6 +135,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		btnSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/disquetex32.png"))); // NOI18N
 		btnSalvar.setToolTipText("Salvar");
 		btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				try {
 					btnSalvarActionPerformed(evt);
@@ -148,6 +153,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/impressora.png"))); // NOI18N
 		btnImprimir.setToolTipText("Imprimir");
 		btnImprimir.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				try {
 					btnImprimirActionPerformed(evt);
@@ -162,15 +168,17 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		btnBuscar.setToolTipText("Procurar");
 		btnBuscar.addActionListener(new java.awt.event.ActionListener() {
 
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				btnBuscarActionPerformed(evt);
 			}
 		});
 
 		btnDeletar
-				.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/lixeira-de-reciclagem preta.png"))); // NOI18N
+				.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/lixeira-de-reciclagem_preta.png"))); // NOI18N
 		btnDeletar.setToolTipText("Deletar");
 		btnDeletar.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				try {
 					btnDeletarActionPerformed(evt);
@@ -184,6 +192,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/cancelar.png"))); // NOI18N
 		btnCancelar.setToolTipText("Cancelar");
 		btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				try {
 					btnCancelarActionPerformed(evt);
@@ -198,6 +207,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 
 		txtBarCode.setToolTipText("");
 		txtBarCode.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				txtBarCodeActionPerformed(evt);
 			}
@@ -205,6 +215,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 
 		txtValidade.setToolTipText("");
 		txtValidade.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				txtBarCodeActionPerformed(evt);
 			}
@@ -213,6 +224,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		jLabel3.setText("Valor");
 
 		txtValor.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				txtValorActionPerformed(evt);
 			}
@@ -221,6 +233,7 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		jLabel4.setText("Quantidade");
 
 		txtQuantidade.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				txtQuantidadeActionPerformed(evt);
 			}
@@ -231,7 +244,8 @@ public class frameProdutos extends javax.swing.JInternalFrame {
         jLabel6.setText("Valor de Custo");
 
         txtPrecoCusto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPrecoCustoActionPerformed(evt);
             }
         });
@@ -470,10 +484,6 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		// TODO add your handling code here:
 	}// GEN-LAST:event_txtBarCodeActionPerformed
 
-	private void txtValidadeActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtBarCodeActionPerformed
-		// TODO add your handling code here:
-	}// GEN-LAST:event_txtBarCodeActionPerformed
-
 	private void txtValorActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtValorActionPerformed
 		// TODO add your handling code here:
 	}// GEN-LAST:event_txtValorActionPerformed
@@ -493,7 +503,6 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooser.setDialogTitle("Selecione o destino");
 
-		String path;
 		if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 			System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
 			System.out.println("getSelectedFile() : " + chooser.getSelectedFile());
@@ -532,7 +541,6 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 				table.addCell(" ");
 				table.addCell(" ");
 				table.addCell(" ");
-				double valorTotal = 0;
 				for (int i = 0; i < model.getRowCount(); i++) {
 					table.addCell(model.getValueAt(i, 0).toString());
 					table.addCell(model.getValueAt(i, 1).toString());
@@ -573,20 +581,6 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
 	}
 
-	private boolean checkDate(String data) {
-		SimpleDateFormat sf = fmt;
-		sf.setLenient(false);
-		try {
-			Date dp = sf.parse(data);
-			System.out.println("data valida!");
-			return true;
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println("data invalida!");
-			return false;
-		}
-	}
-
 	private void fixTable() throws SQLException {
 		this.model = (DefaultTableModel) jTable1.getModel();
 		model.setRowCount(0);
@@ -619,7 +613,6 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 	}
 
 	private boolean verificaUpdate() {
-		ProdutoModel produto = new ProdutoModel();
 		for (int i = 0; i < model.getRowCount(); i++) {
 			if (!listChange.get(i).getNome().equals(model.getValueAt(i, 1).toString())
 					|| !(listChange.get(i).getBarCode().equals(model.getValueAt(i, 0).toString()))

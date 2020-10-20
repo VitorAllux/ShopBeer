@@ -108,8 +108,7 @@ public class runBackup {
     
     public static void fazRestore() {
         JFileChooser open; 
-        final List<String> comandos = new ArrayList<String>(); 
-    	open = new JFileChooser(new File("C:/BKPCECOM")); 
+        open = new JFileChooser(new File("C:/BKPCECOM")); 
         int op = open.showOpenDialog(null);   
         if(op == JFileChooser.APPROVE_OPTION){
            File arq = open.getSelectedFile(); 

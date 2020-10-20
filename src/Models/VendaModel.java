@@ -3,8 +3,6 @@ package Models;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.xml.crypto.Data;
-
 public class VendaModel {
     private Integer id;
     private Date data;

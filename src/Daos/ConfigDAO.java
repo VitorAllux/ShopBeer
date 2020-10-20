@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import Models.ConfigModel;
-import Models.ProdutoModel;
 
 public class ConfigDAO extends BaseDAO{
 
