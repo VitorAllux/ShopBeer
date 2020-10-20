@@ -25,7 +25,7 @@ public class ConfigDAO extends BaseDAO{
 			ConfigModel config = new ConfigModel().setId(result.getInt("id")).setNomeBanco(result.getString("nomeBanco"))
 					.setPgDump(result.getString("pgDump")).setPgRestore(result.getString("pgRestore"))
 					.setIpBanco(result.getString("ipBanco")).setPortaBanco(result.getString("portaBanco"))
-					.setSenhaBanco(result.getString("senhaBanco")).setUserBanco(result.getString("userBanco"));
+					.setSenhaBanco(result.getString("senhaBanco")).setUserBanco(result.getString("userBanco")).setAutoBackup(result.getString("autobackup"));
 			return config;
 		}else {
 			return null;
@@ -34,7 +34,7 @@ public class ConfigDAO extends BaseDAO{
 	
 	public void createConfig() throws SQLException {
 		this.insertInto("config",
-				"id, nomeBanco, pgDump, pgRestore, ipBanco, senhaBanco, portaBanco, userBanco")
+				"id, nomeBanco, pgDump, pgRestore, ipBanco, senhaBanco, portaBanco, userBanco, autoBackup")
 		.values("0"+
 				", "+quoteStr(" ") +
 				", "+quoteStr(" ") +
@@ -42,6 +42,7 @@ public class ConfigDAO extends BaseDAO{
 				", " + quoteStr(" ") +
 				", " + quoteStr(" ") +
 				", " +quoteStr(" ") +
+				", " + quoteStr(" ") +
 				", " + quoteStr(" ")) 
 		.commit();
 	}
@@ -49,14 +50,15 @@ public class ConfigDAO extends BaseDAO{
 	public void updateConfig(ConfigModel config) throws SQLException {
 		this.update("config")
 		.setValue(
-				", id = " + "0" +
-				" nomeBanco = " + quoteStr(config.getNomeBanco())+
-				" pgDump = " + quoteStr(config.getPgDump())+
-				" pgRestore = " + quoteStr(config.getPgRestore())+
-				" ipBanco = " + quoteStr(config.getIpBanco())+
-				" senhaBanco = " + quoteStr(config.getSenhaBanco())+
-				" portaBanco = " + quoteStr(config.getPortaBanco())+
-				", userBanco = " + quoteStr(config.getUserBanco())
+				" id = " + "0" +
+				", nomeBanco = " + quoteStr(config.getNomeBanco())+
+				", pgDump = " + quoteStr(config.getPgDump())+
+				", pgRestore = " + quoteStr(config.getPgRestore())+
+				", ipBanco = " + quoteStr(config.getIpBanco())+
+				", senhaBanco = " + quoteStr(config.getSenhaBanco())+
+				", portaBanco = " + quoteStr(config.getPortaBanco())+
+				", userBanco = " + quoteStr(config.getUserBanco())+
+				", autobackup = " + quoteStr(config.getAutoBackup())
 				)
 		.where("id", "=", Integer.toString((config.getId())))
 		.commit();

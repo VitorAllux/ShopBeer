@@ -8,6 +8,7 @@ public class ConfigModel {
 	private String userBanco;
 	private String ipBanco;
 	private String portaBanco;
+	private String autoBackup;
 	private int id;
 
 	public ConfigModel() {
@@ -19,6 +20,7 @@ public class ConfigModel {
 		this.userBanco = "";
 		this.ipBanco = "";
 		this.portaBanco = "";
+		this.autoBackup = "";
 		this.id = 0;
 	}
 
@@ -31,6 +33,7 @@ public class ConfigModel {
 		this.userBanco = config.userBanco;
 		this.ipBanco = config.ipBanco;
 		this.portaBanco = config.portaBanco;
+		this.autoBackup = config.autoBackup;
 	}
 
 	public String getPgDump() {
@@ -39,6 +42,15 @@ public class ConfigModel {
 
 	public ConfigModel setPgDump(String pgDump) {
 		this.pgDump = pgDump;
+		return this;
+	}
+	
+	public String getAutoBackup() {
+		return autoBackup;
+	}
+
+	public ConfigModel setAutoBackup(String autoBackup) {
+		this.autoBackup = autoBackup;
 		return this;
 	}
 

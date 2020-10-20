@@ -371,7 +371,7 @@ public class frameRestore extends javax.swing.JInternalFrame {
 	}
 
 	public void fixFields() {
-		btnDirRestore.setText(config.getPgRestore());
+		txtDirRestore.setText(config.getPgRestore());
 		txtNome.setText(config.getNomeBanco());
 		txtSenha.setText(config.getSenhaBanco());
 		txtUsuario.setText(config.getUserBanco());

@@ -17,12 +17,18 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import BackupAndRestore.PostgresBackup;
+import Daos.ConfigDAO;
+import Models.ConfigModel;
 
 /**
  *
@@ -33,10 +39,19 @@ public class ViewMenu extends JFrame {
     /**
      * Creates new form Menu
      */
+	private ConfigModel config;
+	private ConfigDAO configDao;
 	private Connection conn;
     public ViewMenu(Connection conn) {
     	this.conn = conn;
+
         initComponents();
+    	try {
+			autoBackup();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         //setExtendedState(JFrame.MAXIMIZED_BOTH);
         
 
@@ -68,9 +83,9 @@ public class ViewMenu extends JFrame {
         miBackup = new javax.swing.JMenuItem();
         miRestore = new javax.swing.JMenuItem();
         mVendasRelatorioVendas = new javax.swing.JMenuItem();
-        mAjuda = new javax.swing.JMenu();
-        mAjudaAjuda = new javax.swing.JMenuItem();
-        mAjudaSobre = new javax.swing.JMenuItem();
+        mConfiguracoes = new javax.swing.JMenu();
+        miConfiguracoes = new javax.swing.JMenuItem();
+        miSobre = new javax.swing.JMenuItem();
 
         /*setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -89,16 +104,19 @@ public class ViewMenu extends JFrame {
         jDesktopPane2.add(jLabel1);*/
 		setJMenuBar(jMenuBar1);
 		setTitle("Beer Shop");
-		setExtendedState(Frame.MAXIMIZED_BOTH);
+
 		setBackground(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setUndecorated(true);
+		//setUndecorated(true);
 		setResizable(true);
 		setMinimumSize(new Dimension(1080,800));
 
 		setLocationRelativeTo(null);
+		
+		
 		setContentPane(CreateContentPane());
 		setIconImage(new javax.swing.ImageIcon(getClass().getResource("/Imagens/caneca-de-cervejax32.png")).getImage());
+		setExtendedState(Frame.MAXIMIZED_BOTH);
 
 
         getContentPane().add(jDesktopPane2);
@@ -192,14 +210,28 @@ public class ViewMenu extends JFrame {
         jMenuBar1.add(mFerramentas);
 
 
-        mAjuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/computador-desktop.png"))); // NOI18N
-        mAjuda.setText("Ajuda");
+        mConfiguracoes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/engrenagemx24.png"))); // NOI18N
+        mConfiguracoes.setText("Configurações");
 
-        mAjudaAjuda.setText("Ajuda");
-        mAjuda.add(mAjudaAjuda);
+        miConfiguracoes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/engrenagemx24.png"))); // NOI18N
+        miConfiguracoes.setText("Configurações");
+        miConfiguracoes.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+		        frameConfig frameConfig = new frameConfig(conn);
+		        jDesktopPane2.add(frameConfig);
+		        frameConfig.setPosicao();
+		        frameConfig.show();
+				
+			}
+		});
+        mConfiguracoes.add(miConfiguracoes);
 
-        mAjudaSobre.setText("Sobre");
-        mAjudaSobre.addActionListener(new ActionListener() {
+        miSobre.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/sobre.png"))); // NOI18N
+        miSobre.setText("Sobre");
+        miSobre.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -211,10 +243,10 @@ public class ViewMenu extends JFrame {
 				
 			}
 		});
-        mAjuda.add(mAjudaSobre);
+        mConfiguracoes.add(miSobre);
         
 
-        jMenuBar1.add(mAjuda);
+        jMenuBar1.add(mConfiguracoes);
 
         //setJMenuBar(jMenuBar1);
         setVisible(true);
@@ -283,7 +315,59 @@ public class ViewMenu extends JFrame {
     	jDesktopPane2.add(f);
     	f.setPosicao();
     	f.show();
-    }                                         
+    }
+    
+    private void autoBackup() throws SQLException {
+		configDao = new ConfigDAO(conn);
+		if (configDao.getConfig(0) == null) {
+			configDao.createConfig();
+		}
+		int intervalo = 2000;
+
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+
+				try {
+					while (!Thread.currentThread().isInterrupted()) {
+						int sleepIn = 5000;
+						config = configDao.getConfig(0);
+						if (!config.getAutoBackup().equals(" ") || !config.getIpBanco().equals(" ")
+								|| !config.getNomeBanco().equals(" ") || !config.getPgDump().equals(" ")
+								|| !config.getPgRestore().equals(" ") || !config.getPortaBanco().equals(" ")
+								|| !config.getSenhaBanco().equals(" ")
+								|| !config.getUserBanco().equals(" ")) {
+							int interval = Integer.parseInt(config.getAutoBackup());
+							//Thread.sleep(Integer.parseInt(config.getAutoBackup()));
+							Thread.sleep(interval);
+							
+							try {
+								
+							String save = System.getProperty("user.home") + "\\documents\\autoBackup.sql".replace(" ", "");
+							new PostgresBackup(
+									save.replace(" ", ""),
+									config.getPgDump().replace(" ", ""), config.getNomeBanco().replace(" ", ""), config.getSenhaBanco().replace(" ", ""),
+									config.getUserBanco().replace(" ", ""), config.getIpBanco().replace(" ", ""), config.getPortaBanco().replace(" ", ""), 1);
+							} catch (Exception e) {
+								// TODO: handle exception
+							}
+							JOptionPane.showMessageDialog(null, "Backup Automatico realizado com sucesso!", "Backup!",
+									JOptionPane.INFORMATION_MESSAGE,
+									new javax.swing.ImageIcon(getClass().getResource("/Imagens/verificado.png")));
+						} else {
+							Thread.sleep(5000);
+							System.out.println("Auto Backup Off");
+						}
+
+					}
+				} catch (Exception e) {
+
+				}
+			}
+		}).start();
+
+    }
 
 
 
@@ -296,9 +380,9 @@ public class ViewMenu extends JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JMenu mAjuda;
-    private javax.swing.JMenuItem mAjudaAjuda;
-    private javax.swing.JMenuItem mAjudaSobre;
+    private javax.swing.JMenu mConfiguracoes;
+    private javax.swing.JMenuItem miConfiguracoes;
+    private javax.swing.JMenuItem miSobre;
     private javax.swing.JMenu mMenu;
     private javax.swing.JMenuItem mMenuProdutos;
     private javax.swing.JMenuItem mMenuSair;

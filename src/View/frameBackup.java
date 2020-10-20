@@ -332,7 +332,8 @@ public class frameBackup extends javax.swing.JInternalFrame {
 	private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
 		if (txtDirDump.getText().isEmpty() || txtDirSave.getText().isEmpty() || txtNome.getText().isEmpty()
-				|| txtSenha.getText().isEmpty() || txtUsuario.getText().isEmpty()) {
+				|| txtSenha.getText().isEmpty() || txtUsuario.getText().isEmpty() || txtDirDump.getText().equals(" ") || txtDirSave.getText().equals(" ") || txtNome.getText().equals(" ")
+				|| txtSenha.getText().equals(" ") || txtUsuario.getText().equals(" ")) {
 			JOptionPane.showMessageDialog(null, "Preencha todos os campos!", "falha!", JOptionPane.ERROR_MESSAGE,
 					new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
 		} else {
@@ -349,7 +350,7 @@ public class frameBackup extends javax.swing.JInternalFrame {
 			}	
 			PostgresBackup pkb = new PostgresBackup(dirSave.replace(" ", ""), txtDirDump.getText().toString().replace(" ", ""),
 					txtNome.getText().toString().replace(" ", ""), txtSenha.getText().toString().replace(" ", ""), txtUsuario.getText().toString().replace(" ", ""),
-					txtIp.getText().toString().replace(" ", ""), txtPorta.getText().toString().replace(" ", ""));
+					txtIp.getText().toString().replace(" ", ""), txtPorta.getText().toString().replace(" ", ""), 0 );
 
 		}
 	}

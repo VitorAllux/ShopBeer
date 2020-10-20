@@ -10,7 +10,8 @@ import javax.swing.JOptionPane;
 
 public class PostgresBackup {
 
-	public PostgresBackup(String localSave,String localDump, String nomeBanco, String senhaBanco, String user, String ip, String porta) {
+	public PostgresBackup(String localSave,String localDump, String nomeBanco, String senhaBanco, String user, String ip, String porta, int op) {
+		System.out.println("tento criar backup");
 		final List<String> comandos = new ArrayList<String>();
 		comandos.add(localDump);
 
@@ -46,9 +47,15 @@ public class PostgresBackup {
 
 			process.waitFor();
 			process.destroy();
+			if(op ==  1) {
+				JOptionPane.showMessageDialog(null, "Backup automático realizado com sucesso!!", "Sucesso!",
+						JOptionPane.INFORMATION_MESSAGE,
+						new javax.swing.ImageIcon(getClass().getResource("/Imagens/verificado.png")));
+			} else {
 			JOptionPane.showMessageDialog(null, "Backup realizado com sucesso!!", "Sucesso!",
 					JOptionPane.INFORMATION_MESSAGE,
 					new javax.swing.ImageIcon(getClass().getResource("/Imagens/verificado.png")));
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
