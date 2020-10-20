@@ -32,9 +32,24 @@ public class ConfigDAO extends BaseDAO{
 		}
 	}
 	
-	public void updateProduto(ConfigModel config) throws SQLException {
+	public void createConfig() throws SQLException {
+		this.insertInto("config",
+				"id, nomeBanco, pgDump, pgRestore, ipBanco, senhaBanco, portaBanco, userBanco")
+		.values("0"+
+				", "+quoteStr(" ") +
+				", "+quoteStr(" ") +
+				", " + quoteStr(" ") +
+				", " + quoteStr(" ") +
+				", " + quoteStr(" ") +
+				", " +quoteStr(" ") +
+				", " + quoteStr(" ")) 
+		.commit();
+	}
+	
+	public void updateConfig(ConfigModel config) throws SQLException {
 		this.update("config")
 		.setValue(
+				", id = " + "0" +
 				" nomeBanco = " + quoteStr(config.getNomeBanco())+
 				" pgDump = " + quoteStr(config.getPgDump())+
 				" pgRestore = " + quoteStr(config.getPgRestore())+

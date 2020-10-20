@@ -295,10 +295,10 @@ public class FrameVendas extends javax.swing.JInternalFrame {
 	private void atualizaValor() {
 		double valor = 0;
 		for (int i = 0; i < model.getRowCount(); i++) {
-			valor += (Double.parseDouble(model.getValueAt(i, 2).toString())
-					* Double.parseDouble(model.getValueAt(i, 3).toString()));
+			valor += (Double.parseDouble(model.getValueAt(i, 2).toString().replace(",","."))
+					* Double.parseDouble(model.getValueAt(i, 3).toString().replace(",",".")));
 		}
-		txtValor.setText(String.valueOf(valor));
+		txtValor.setText(String.valueOf(valor).replace(",","."));
 		valorTotal = valor;
 	}
 

@@ -111,7 +111,7 @@ public class frameRestore extends javax.swing.JInternalFrame {
 			}
 		});
 
-		btnDirBackup.setIcon(new javax.swing.ImageIcon("C:\\Users\\vitor\\Desktop\\lupax16.png")); // NOI18N
+		btnDirBackup.setText("...");
 		btnDirBackup.setToolTipText("Buscar");
 		btnDirBackup.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -139,7 +139,7 @@ public class frameRestore extends javax.swing.JInternalFrame {
 			}
 		});
 
-		btnDirRestore.setIcon(new javax.swing.ImageIcon("C:\\Users\\vitor\\Desktop\\lupax16.png")); // NOI18N
+	btnDirRestore.setText("...");
 		btnDirRestore.setToolTipText("Buscar");
 		btnDirRestore.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -209,13 +209,13 @@ public class frameRestore extends javax.swing.JInternalFrame {
 												.addComponent(txtDirRestore, javax.swing.GroupLayout.PREFERRED_SIZE,
 														311, javax.swing.GroupLayout.PREFERRED_SIZE)
 												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-												.addComponent(btnDirRestore, javax.swing.GroupLayout.PREFERRED_SIZE, 30,
+												.addComponent(btnDirRestore, javax.swing.GroupLayout.PREFERRED_SIZE, 40,
 														javax.swing.GroupLayout.PREFERRED_SIZE))
 										.addGroup(layout.createSequentialGroup()
 												.addComponent(txtDirBackup, javax.swing.GroupLayout.PREFERRED_SIZE, 311,
 														javax.swing.GroupLayout.PREFERRED_SIZE)
 												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-												.addComponent(btnDirBackup, javax.swing.GroupLayout.PREFERRED_SIZE, 30,
+												.addComponent(btnDirBackup, javax.swing.GroupLayout.PREFERRED_SIZE, 40,
 														javax.swing.GroupLayout.PREFERRED_SIZE))
 										.addGroup(layout.createSequentialGroup().addGroup(layout
 												.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -292,7 +292,8 @@ public class frameRestore extends javax.swing.JInternalFrame {
 	private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
 		if (txtDirRestore.getText().isEmpty() || txtDirBackup.getText().isEmpty() || txtNome.getText().isEmpty()
-				|| txtSenha.getText().isEmpty() || txtUsuario.getText().isEmpty()) {
+				|| txtSenha.getText().isEmpty() || txtUsuario.getText().isEmpty() || txtDirRestore.getText().equals(" ") || txtDirBackup.getText().equals(" ") || txtNome.getText().equals(" ")
+				|| txtSenha.getText().equals(" ") || txtUsuario.getText().equals(" ")) {
 			JOptionPane.showMessageDialog(null, "Preencha todos os campos!", "falha!", JOptionPane.ERROR_MESSAGE,
 					new javax.swing.ImageIcon(getClass().getResource("/Imagens/sinal-de-avisox32.png")));
 		} else if (nomeArquivo.equals("")) {

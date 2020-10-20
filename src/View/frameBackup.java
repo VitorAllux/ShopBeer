@@ -112,7 +112,7 @@ public class frameBackup extends javax.swing.JInternalFrame {
 			}
 		});
 
-		btnDirDump.setIcon(new javax.swing.ImageIcon("C:\\Users\\vitor\\Desktop\\lupax16.png")); // NOI18N
+		btnDirDump.setText("...");
 		btnDirDump.setToolTipText("Buscar");
 		btnDirDump.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -163,7 +163,7 @@ public class frameBackup extends javax.swing.JInternalFrame {
 
 		jLabel5.setText("Usuário");
 
-		btnDirSave.setIcon(new javax.swing.ImageIcon("C:\\Users\\vitor\\Desktop\\lupax16.png")); // NOI18N
+		btnDirSave.setText("...");
 		btnDirSave.setToolTipText("Buscar");
 		btnDirSave.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -209,13 +209,13 @@ public class frameBackup extends javax.swing.JInternalFrame {
 												.addComponent(txtDirDump, javax.swing.GroupLayout.PREFERRED_SIZE, 311,
 														javax.swing.GroupLayout.PREFERRED_SIZE)
 												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-												.addComponent(btnDirDump, javax.swing.GroupLayout.PREFERRED_SIZE, 30,
+												.addComponent(btnDirDump, javax.swing.GroupLayout.PREFERRED_SIZE, 40,
 														javax.swing.GroupLayout.PREFERRED_SIZE))
 										.addGroup(layout.createSequentialGroup()
 												.addComponent(txtDirSave, javax.swing.GroupLayout.PREFERRED_SIZE, 311,
 														javax.swing.GroupLayout.PREFERRED_SIZE)
 												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-												.addComponent(btnDirSave, javax.swing.GroupLayout.PREFERRED_SIZE, 30,
+												.addComponent(btnDirSave, javax.swing.GroupLayout.PREFERRED_SIZE, 40,
 														javax.swing.GroupLayout.PREFERRED_SIZE))
 										.addGroup(layout.createSequentialGroup().addGroup(layout
 												.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -347,9 +347,9 @@ public class frameBackup extends javax.swing.JInternalFrame {
 			if(!formato.equals(".sql")) {
 				dirSave = dirSave + ".sql";	
 			}	
-			PostgresBackup pkb = new PostgresBackup(dirSave, txtDirDump.getText().toString(),
-					txtNome.getText().toString(), txtSenha.getText().toString(), txtUsuario.getText().toString(),
-					txtIp.getText().toString(), txtPorta.getText().toString());
+			PostgresBackup pkb = new PostgresBackup(dirSave.replace(" ", ""), txtDirDump.getText().toString().replace(" ", ""),
+					txtNome.getText().toString().replace(" ", ""), txtSenha.getText().toString().replace(" ", ""), txtUsuario.getText().toString().replace(" ", ""),
+					txtIp.getText().toString().replace(" ", ""), txtPorta.getText().toString().replace(" ", ""));
 
 		}
 	}

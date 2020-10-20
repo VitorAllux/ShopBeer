@@ -12,13 +12,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.JFileChooser;
@@ -614,8 +611,8 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		produtoChange.setNome(txtNome.getText());
 		produtoChange.setBarCode(txtBarCode.getText());
 		produtoChange.setCategoria(ComboboxProdutos.getSelectedItem().toString());
-		produtoChange.setPreco(Double.valueOf(txtValor.getText()));
-		produtoChange.setPrecoCusto(Double.valueOf(txtPrecoCusto.getText()));
+		produtoChange.setPreco(Double.valueOf(txtValor.getText().replace(",",".")));
+		produtoChange.setPrecoCusto(Double.valueOf(txtPrecoCusto.getText().replace(",",".")));
 		produtoChange.setQuantidade(Integer.parseInt(txtQuantidade.getText()));
 		produtoChange.setValDate(valDate.getDate());
 
@@ -626,8 +623,8 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 		for (int i = 0; i < model.getRowCount(); i++) {
 			if (!listChange.get(i).getNome().equals(model.getValueAt(i, 1).toString())
 					|| !(listChange.get(i).getBarCode().equals(model.getValueAt(i, 0).toString()))
-					|| !(listChange.get(i).getPreco() == Double.parseDouble(model.getValueAt(i, 2).toString()))
-					|| !(listChange.get(i).getPrecoCusto() == Double.parseDouble(model.getValueAt(i, 3).toString()))
+					|| !(listChange.get(i).getPreco() == Double.parseDouble(model.getValueAt(i, 2).toString().replace(",",".")))
+					|| !(listChange.get(i).getPrecoCusto() == Double.parseDouble(model.getValueAt(i, 3).toString().replace(",",".")))
 					|| !(listChange.get(i).getQuantidade() == Integer.parseInt(model.getValueAt(i, 4).toString()))
 					|| !(listChange.get(i).getValDate().equals(model.getValueAt(i, 5).toString()))) {
 				return false;
@@ -649,8 +646,8 @@ public class frameProdutos extends javax.swing.JInternalFrame {
 				produto.setNome(model.getValueAt(i, 1).toString());
 				produto.setCategoria(listChange.get(i).getCategoria());
 				produto.setBarCode(model.getValueAt(i, 0).toString());
-				produto.setPreco(Double.parseDouble(model.getValueAt(i, 2).toString()));
-				produto.setPrecoCusto(Double.parseDouble(model.getValueAt(i, 3).toString()));
+				produto.setPreco(Double.parseDouble(model.getValueAt(i, 2).toString().replace(",",".")));
+				produto.setPrecoCusto(Double.parseDouble(model.getValueAt(i, 3).toString().replace(",",".")));
 				produto.setQuantidade(Integer.parseInt(model.getValueAt(i, 4).toString()));
 				produto.setValDate(fmt.parse((String) model.getValueAt(i, 5)));
 				produtoDao.updateProduto(produto);
